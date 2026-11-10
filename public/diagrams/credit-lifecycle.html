@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>From shared credits to metered usage</title>
+  <style>
+    :root{color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    :root[data-theme="dark"]{color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}}
+    :root:has(#dark:target){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    :root:has(#light:target){color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 system-ui,Arial,sans-serif}
+    main{max-width:1100px;min-width:0;margin:auto;padding:24px}header{margin-bottom:20px}.eyebrow{font:500 11px/1.5 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+    h1{font:500 30px/1.2 Georgia,serif;margin:8px 0 12px}p{margin:8px 0;color:var(--muted)}
+    .diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:8px}.diagram-container:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    svg{display:block;width:100%;min-width:960px;background:var(--paper)}svg text{fill:var(--ink);font-family:system-ui,Arial,sans-serif}.node{fill:var(--paper);stroke:var(--muted);stroke-width:1.5}.focal{fill:var(--tint);stroke:var(--accent);stroke-width:1.5}.name{font-size:16px;font-weight:600}.sub{font-size:12px;fill:var(--muted)}.tag{font:11px ui-monospace,monospace;fill:var(--muted);letter-spacing:.05em}.edge{fill:none;stroke:var(--muted);stroke-width:1.5;marker-end:url(#credit-lifecycle-arrow)}.arrow-label{font:11px ui-monospace,monospace;fill:var(--muted)}.mask{fill:var(--paper)}.rule{stroke:var(--rule)}
+    footer{margin-top:20px;border-top:1px solid var(--rule);padding-top:12px}footer p{font-size:13px}a{color:var(--accent);text-underline-offset:3px}strong{color:var(--ink)}.sources{font-size:12px}
+    @media(max-width:600px){main{padding:16px}h1{font-size:26px}}
+    @media print{.diagram-container{overflow-x:visible}svg{min-width:0}main{padding:0}}
+  </style>
+</head>
+<body>
+<span id="light" hidden></span><span id="dark" hidden></span>
+<main>
+  <header>
+    <div class="eyebrow">01 / Credit lifecycle · Copilot Business &amp; Enterprise</div>
+    <h1>From shared credits to metered usage</h1>
+    <p>A shared included allowance is not a departmental wallet. Once it is exhausted, paid usage depends on policy and applicable enforced limits.</p>
+  </header>
+  <div class="diagram-container" tabindex="0" role="region" aria-label="Credit lifecycle diagram; scroll horizontally on smaller screens">
+    <svg viewBox="0 0 960 600" role="img" aria-labelledby="credit-lifecycle-title credit-lifecycle-desc">
+      <title id="credit-lifecycle-title">From shared credits to metered usage</title>
+      <desc id="credit-lifecycle-desc">Token-priced Copilot usage consumes included pooled credits first, then either continues as permitted metered usage or is blocked, subject to consumption controls.</desc>
+      <defs><marker id="credit-lifecycle-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 8 4 L 0 8 Z" fill="var(--muted)"/></marker></defs>
+      <text x="40" y="36" class="tag">CONCEPTUAL FUNDING FLOW — NOT A COMPLETE POLICY EVALUATOR</text>
+      <path class="edge" d="M 248 112 H 304"/>
+      <path class="edge" d="M 512 112 H 568"/>
+      <path class="edge" d="M 680 176 V 220"/>
+      <path class="edge" d="M 792 112 H 856 Q 864 112 864 120 V 372 Q 864 380 856 380 H 792"/>
+      <path class="edge" d="M 680 444 V 492"/>
+      <path class="edge" d="M 568 380 H 520 Q 512 380 512 388 V 520 Q 512 528 504 528 H 392"/>
+      <rect x="688" y="192" width="48" height="20" class="mask"/><text x="712" y="206" text-anchor="middle" class="arrow-label">YES</text>
+      <rect x="872" y="236" width="40" height="20" class="mask"/><text x="892" y="250" text-anchor="middle" class="arrow-label">NO</text>
+      <rect x="692" y="456" width="48" height="20" class="mask"/><text x="716" y="470" text-anchor="middle" class="arrow-label">YES</text>
+      <rect x="520" y="448" width="40" height="20" class="mask"/><text x="540" y="462" text-anchor="middle" class="arrow-label">NO</text>
+      <g data-node="interaction">
+        <rect x="40" y="72" width="208" height="80" rx="20" class="node"/>
+        <text x="64" y="104" class="name">Copilot interaction</text>
+        <text x="64" y="128" class="sub">A credit-consuming feature</text>
+      </g>
+      <g data-node="pricing">
+        <rect x="304" y="72" width="208" height="80" rx="6" class="node"/>
+        <text x="328" y="104" class="name">Tokens → credits</text>
+        <text x="328" y="128" class="sub">Model + input/output/cache</text>
+      </g>
+      <g data-node="pool-decision">
+        <path d="M 680 48 L 792 112 L 680 176 L 568 112 Z" class="node"/>
+        <text x="680" y="106" text-anchor="middle" class="name">Pool available?</text>
+        <text x="680" y="128" text-anchor="middle" class="sub">Included allowance</text>
+      </g>
+      <g data-node="included">
+        <rect x="568" y="220" width="224" height="80" rx="6" class="focal"/>
+        <text x="588" y="250" class="name">Draw from shared pool</text>
+        <text x="588" y="274" class="sub">Licenses fund one allowance</text>
+        <text x="588" y="292" class="sub">Not one wallet per user</text>
+      </g>
+      <g data-node="paid-policy">
+        <path d="M 680 316 L 792 380 L 680 444 L 568 380 Z" class="node"/>
+        <text x="680" y="374" text-anchor="middle" class="name">Paid usage allowed?</text>
+        <text x="680" y="396" text-anchor="middle" class="sub">AI credits paid usage policy</text>
+      </g>
+      <g data-node="metered">
+        <rect x="568" y="492" width="224" height="72" rx="6" class="node"/>
+        <text x="588" y="522" class="name">Metered charges</text>
+        <text x="588" y="546" class="sub">Applicable spending limits apply</text>
+      </g>
+      <g data-node="blocked">
+        <rect x="168" y="492" width="224" height="72" rx="20" class="node"/>
+        <text x="192" y="522" class="name">Credit features blocked</text>
+        <text x="192" y="546" class="sub">Until reset or policy change</text>
+      </g>
+      <line x1="40" y1="584" x2="920" y2="584" class="rule"/>
+      <text x="40" y="578" class="tag">RECTANGLE: ACTIVITY / FUNDING · DIAMOND: CONDITION · ROUNDED: ENTRY / OUTCOME</text>
+    </svg>
+  </div>
+  <footer>
+    <p><strong>Prose alternative.</strong> Credit-consuming interactions are priced using the selected model and tokens. Business and Enterprise usage draws from the billing entity’s included pool first. When that pool is exhausted, the paid-usage policy determines whether usage can continue as metered charges; applicable enforced budgets can still block it.</p>
+    <p><strong>Controls span the flow.</strong> The applicable user-level budget caps included <em>and</em> metered consumption and always enforces a hard stop. Cost-center included-usage controls can limit a group’s pool draw separately. This overview omits that early-overage path; see the guardrails diagram.</p>
+    <p><strong>Reset, not rollover.</strong> Unused included credits expire at the monthly reset. Copilot access has no included pool and is metered from first use. Inline completions and next edit suggestions do not consume AI credits and remain available after budget blocks.</p>
+    <p class="sources" style="overflow-wrap:anywhere">Sources, checked 10 Nov 2026:<br>GitHub Docs · billing: https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing<br>GitHub Well-Architected · governance: https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/</p>
+    <p class="sources">System fonts keep this standalone diagram self-contained.</p>
+  </footer>
+</main>
+</body>
+</html>

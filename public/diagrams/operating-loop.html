@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>The AI credits operating loop</title>
+  <style>
+    :root{color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    :root[data-theme="dark"]{color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}}
+    :root:has(#dark:target){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    :root:has(#light:target){color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 system-ui,Arial,sans-serif}
+    main{max-width:1100px;min-width:0;margin:auto;padding:24px}header{margin-bottom:20px}.eyebrow{font:500 11px/1.5 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+    h1{font:500 30px/1.2 Georgia,serif;margin:8px 0 12px}p{margin:8px 0;color:var(--muted)}
+    .diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:8px}.diagram-container:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    svg{display:block;width:100%;min-width:960px;background:var(--paper)}svg text{fill:var(--ink);font-family:system-ui,Arial,sans-serif}.node{fill:var(--paper);stroke:var(--muted);stroke-width:1.5}.focal{fill:var(--tint);stroke:var(--accent);stroke-width:1.5}.hub{fill:var(--ink);stroke:var(--ink)}.hub-text{fill:var(--paper)}.name{font-size:16px;font-weight:600}.sub{font-size:12px;fill:var(--muted)}.tag{font:11px ui-monospace,monospace;fill:var(--muted);letter-spacing:.04em}.ring{fill:none;stroke:var(--muted);stroke-width:1.5;marker-end:url(#operating-loop-arrow)}.spoke{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:5 4;marker-end:url(#operating-loop-write)}.rule{stroke:var(--rule)}
+    .hub-text{fill:var(--paper)}footer{margin-top:20px;border-top:1px solid var(--rule);padding-top:12px}footer p{font-size:13px}a{color:var(--accent);text-underline-offset:3px}strong{color:var(--ink)}.sources{font-size:12px}
+    @media(max-width:600px){main{padding:16px}h1{font-size:26px}}
+    @media print{.diagram-container{overflow-x:visible}svg{min-width:0}main{padding:0}}
+  </style>
+</head>
+<body>
+<span id="light" hidden></span><span id="dark" hidden></span>
+<main>
+  <header>
+    <div class="eyebrow">03 / Operating model · Recommended governance practice</div>
+    <h1>The AI credits operating loop</h1>
+    <p>Observations become decisions, not automatic purchase approvals. Each pass updates one shared record of evidence, ownership, and continuity risk.</p>
+  </header>
+  <div class="diagram-container" tabindex="0" role="region" aria-label="AI credits operating loop; scroll horizontally on smaller screens">
+    <svg viewBox="0 0 960 640" role="img" aria-labelledby="operating-loop-title operating-loop-desc">
+      <title id="operating-loop-title">The AI credits operating loop</title>
+      <desc id="operating-loop-desc">Observe, attribute, forecast, decide, apply, and review form a recurring governance loop whose evidence and decisions accumulate in a shared record.</desc>
+      <defs>
+        <marker id="operating-loop-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 8 4 L 0 8 Z" fill="var(--muted)"/></marker>
+        <marker id="operating-loop-write" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 8 4 L 0 8" fill="none" stroke="var(--muted)"/></marker>
+      </defs>
+      <path class="ring" d="M 576 108.794 A 232 232 0 0 1 653.954 166.495"/>
+      <path class="ring" d="M 697.771 240 A 232 232 0 0 1 698.452 398.120"/>
+      <path class="ring" d="M 655.271 472 A 232 232 0 0 1 577.817 530.371"/>
+      <path class="ring" d="M 384 531.206 A 232 232 0 0 1 306.046 473.505"/>
+      <path class="ring" d="M 262.229 400 A 232 232 0 0 1 261.548 241.880"/>
+      <path class="ring" d="M 304.729 168 A 232 232 0 0 1 382.183 109.629"/>
+      <path class="spoke" d="M 480 124 L 480 266"/>
+      <path class="spoke" d="M 618.564 240 L 568.335 269"/>
+      <path class="spoke" d="M 618.564 400 L 568.335 371"/>
+      <path class="spoke" d="M 480 516 L 480 374"/>
+      <path class="spoke" d="M 341.436 400 L 391.665 371"/>
+      <path class="spoke" d="M 341.436 240 L 391.665 269"/>
+      <g data-node="observe">
+        <rect x="384" y="52" width="192" height="72" rx="6" class="node"/>
+        <text x="404" y="80" class="name">Observe</text>
+        <text x="404" y="104" class="sub">Alerts + abnormal usage</text>
+      </g>
+      <g data-node="attribute">
+        <rect x="584" y="168" width="192" height="72" rx="6" class="node"/>
+        <text x="604" y="196" class="name">Attribute</text>
+        <text x="604" y="220" class="sub">Users → cost owners</text>
+      </g>
+      <g data-node="forecast">
+        <rect x="584" y="400" width="192" height="72" rx="6" class="node"/>
+        <text x="604" y="428" class="name">Forecast</text>
+        <text x="604" y="452" class="sub">Observed trend + changes</text>
+      </g>
+      <g data-node="decide">
+        <rect x="384" y="516" width="192" height="72" rx="6" class="focal"/>
+        <text x="404" y="544" class="name">Decide</text>
+        <text x="404" y="568" class="sub">Owner approves / denies</text>
+      </g>
+      <g data-node="apply">
+        <rect x="184" y="400" width="192" height="72" rx="6" class="node"/>
+        <text x="204" y="428" class="name">Apply</text>
+        <text x="204" y="452" class="sub">Budget or usage guidance</text>
+      </g>
+      <g data-node="review">
+        <rect x="184" y="168" width="192" height="72" rx="6" class="node"/>
+        <text x="204" y="196" class="name">Review</text>
+        <text x="204" y="220" class="sub">Actuals + business impact</text>
+      </g>
+      <g data-node="decision-record">
+        <rect x="372" y="272" width="216" height="96" rx="6" class="hub"/>
+        <text x="480" y="304" text-anchor="middle" class="name hub-text">Decision record</text>
+        <text x="480" y="328" text-anchor="middle" class="sub hub-text">Evidence · owner · action</text>
+        <text x="480" y="348" text-anchor="middle" class="sub hub-text">Continuity impact · review</text>
+      </g>
+      <line x1="40" y1="612" x2="920" y2="612" class="rule"/>
+      <text x="40" y="632" class="tag">SOLID RING: OPERATING FLOW · DASHED SPOKES: WRITE EVIDENCE / DECISIONS TO THE RECORD</text>
+    </svg>
+  </div>
+  <footer>
+    <p><strong>Prose alternative.</strong> Observe alerts and anomalies; attribute consumption to users and accountable owners; forecast likely usage; let the responsible owner decide; apply authorized configuration or usage guidance; review actuals and business impact. Feed the outcome into the next observation cycle and retain evidence at every stage.</p>
+    <p><strong>Three separate decisions.</strong> A forecast estimates demand. A configured cap determines enforcement. Authorization determines whether additional spending may proceed under your finance process. Raising a cap is not, by itself, a purchase authorization.</p>
+    <p><strong>Source cadence.</strong> Cost owners review alerts daily; billing managers investigate spikes daily and report weekly. Review rollout patterns weekly, then monthly once stable. The owner chooses optimization, restriction, or a budget increase; the billing manager applies it. This visual is a synthesis, not a GitHub system execution trace.</p>
+    <p class="sources" style="overflow-wrap:anywhere">Sources, checked 10 Nov 2026:<br>Well-Architected · operating model and reviews: https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/<br>GitHub Docs · budget effects: https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing</p>
+    <p class="sources">System fonts keep this standalone diagram self-contained.</p>
+  </footer>
+</main>
+</body>
+</html>
