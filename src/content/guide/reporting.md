@@ -1,8 +1,8 @@
 ---
-title: Attribute before you optimize
+title: Follow usage to its cost owner
 section: Day-two operations
 order: 7
-description: Connect usage to a responsible owner before you restrict models, change limits, or introduce chargeback.
+description: Walk a usage record through mapping and reconciliation before turning visibility into a financial allocation.
 verified: "2026-11-10"
 diagram: attribution-pipeline
 sources:
@@ -13,34 +13,22 @@ sources:
 
 ## What you will learn
 
-- You can build a minimal reporting pipeline using existing tools.
-- You can separate showback from chargeback.
-- You can identify mapping gaps before making budget decisions.
+- You can keep unknown ownership visible and reconcile a report.
+- You can distinguish showback from approved chargeback.
 
-## Start with the usage report
+## Worked scenario: the unmapped team transfer
 
-Well-Architected identifies the downloadable AI usage CSV report, including per-user, per-model, per-day breakdowns, as the foundation for attribution. Check the actual export's current fields before building a transformation; this guide does not invent an API schema.
+**Hypothetical use case:** A developer moves teams but the reporting map is unchanged. The usage total reconciles, yet the wrong unit would receive the charge. Keep the record explicitly **unmapped** until the accountable maintainer resolves ownership and any historical correction. A neat dashboard cannot fix an incorrect mapping.
 
-**Guide advice:** Start with a controlled spreadsheet or an existing reporting tool. Retain the reporting period and source export. Join users to the business unit or cost center responsible for the spend. Keep an explicit "unmapped" category instead of silently assigning missing records to a convenient team.
+**Guide advice:** Start with the downloadable AI usage CSV and a controlled spreadsheet or existing reporting tool. [Well-Architected](https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/) identifies per-user, per-model, per-day usage as the foundation. Check current export fields; retain the period and source.
 
-## Make the mapping accountable
+## Check each handoff
 
-Agree who maintains identity-to-cost-center assignments, how transfers are handled, and when historical reporting is restated. GitHub's assignment and allocation rules determine billing attribution; your internal reporting rules must not pretend to override them.
+- **Map:** name the assignment maintainer and transfer process. Internal reporting cannot override GitHub's billing-allocation rules.
+- **Reconcile:** compare the same period; investigate duplicates, missing users and unexpected totals.
+- **Show back:** make usage and cost visible without transferring a charge.
+- **Charge back only by agreement:** finance approves allocation, disputes and shared-team treatment.
 
-Reconcile totals to the source export before presenting unit-level numbers. Investigate duplicate assignments, missing users, and unexpected allocation. Do not compare two reports from different periods as if they were the same snapshot.
-
-## Showback first, chargeback by agreement
-
-**Showback** makes consumption and cost visible to the responsible business unit without transferring a charge. **Chargeback** uses an agreed financial process to allocate charges. The Well-Architected maturity path introduces showback in Start and chargeback, where appropriate, in Adopt.
-
-Before chargeback, finance should approve which costs are allocated, the allocation basis, disputed-record handling, and the treatment of shared platform teams. A chart is not a financial ledger.
-
-## Keep the reporting proportionate
-
-Limit access to identifiable usage to people who need it. Follow your enterprise's retention, privacy, and employee-monitoring policies. Use aggregated team views for general distribution. Do not equate token consumption with individual performance.
-
-## Read the attribution pipeline
-
-The diagram below traces the smallest useful path: source usage, mapping, reconciliation, and an owned decision. Add a warehouse or scheduled API integration only when the existing process no longer meets a measured need.
+Restrict identifiable usage to people who need it and follow retention/privacy policies. Do not equate consumption with individual performance.
 
 If automating later, the organization/user **REST billing usage-summary endpoints — <span class="status caution">public preview - use with caution</span>** are explicitly labeled preview in the [REST reference](https://docs.github.com/en/rest/billing/usage). This label is specific to `GET /organizations/{org}/settings/billing/usage/summary` and `GET /users/{username}/settings/billing/usage/summary`, not every billing endpoint. Personal-user endpoints do not include usage billed through an organization or enterprise; select the paying account's reporting scope.

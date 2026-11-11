@@ -1,9 +1,10 @@
 ---
-title: Plan before you set amounts
+title: Give teams room without losing control
 section: Plan your budgets
 order: 4
-description: Turn business intent into a signed-off control design, not an arbitrary number per developer.
+description: Compare a shared included pool with team-level controls, then turn the choice into an approved decision brief.
 verified: "2026-11-10"
+diagram: cost-center-controls
 sources:
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
@@ -11,54 +12,40 @@ sources:
 
 ## What you will learn
 
-- You can separate financial authority from product enforcement.
-- You can choose centralized or delegated accountability.
-- You can size a provisional baseline without pretending to have usage history.
+- You can choose the right control for shared credits versus paid overage.
+- You can agree ownership before choosing amounts.
 
-## Write the decision brief
+## Worked scenario: two cost centers, one shared pool
 
-**Guide advice:** Capture the following in your existing planning document before an administrator configures controls.
+**Hypothetical use case:** A platform team runs long agent tasks; a support team uses occasional chat. Their Business or Enterprise licenses fund the same included pool. A metered budget for each team does **not** reserve included credits for it.
 
-| Decision | Required answer | Accountable role |
-| --- | --- | --- |
-| Coverage | Billing entity, plan, users, and workloads in scope | Enterprise platform owner |
-| Financial envelope | Approved license spend and additional metered spend, separately | Finance / procurement |
-| Continuity | Which workloads may stop, and who accepts that impact? | Business workload owners |
-| Accountability | Centralized budget, delegated cost centers, or a mix? | Finance and platform |
-| Attribution | User-to-cost-center mapping and exception process | Identity and FinOps owners |
-| Enforcement | Alert-only or hard stop at each applicable metered scope | Budget approver |
-| Access fairness | Universal ULB, profiles, and individual exception route | Platform owner |
-| Response | Alert recipients, backup owner, and escalation route | Operations lead |
+If fairness requires limiting each team's draw, evaluate the **separate cost-center included-usage control**. GitHub calculates the cap from licenses assigned to that center. Choose block or permitted paid overage when it is reached. For additional charges, use metered budgets. These are separate decisions, not transfers between team wallets.
 
-## Choose your accountability model
+See the [official budget rules](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets) and [release evidence](/sources/) before rollout.
 
-**Centralized:** Keep financial authority with the enterprise owner and use showback to make consumption visible. This is simpler when adoption is early or business units are not ready to own metered spend.
+## Choose who owns the decision
 
-**Delegated:** Align cost centers to spending authority, name local owners, and configure their metered budgets. Decide explicitly whether each center remains inside the enterprise cap. Add chargeback only when finance has agreed the allocation rules.
+**Centralized:** Finance and the platform owner retain financial authority; teams get showback. **Delegated:** cost centers align to named spending owners, with explicit enterprise-cap inclusion or exclusion. Organization structure need not be your financial hierarchy.
 
-Neither model requires using GitHub organization structure as your financial hierarchy. Use the boundary that matches ownership; validate actual assignment and billing behavior.
+**Guide advice:** Capture this brief in an existing planning document.
 
-## Use observations, not a universal allowance
+| Decide | Record |
+| --- | --- |
+| Coverage | Billing entity, plan, people and workloads |
+| Authority | Approved license spend and metered spend, separately |
+| Continuity | Which work may stop, who accepts it, and each enforcement setting |
+| Ownership | Cost-center mapping, approver, alert responder and backup |
+| Exceptions | Applicable ULB, reason, review/expiry date and escalation |
 
-Baseline historical consumption if available. The Well-Architected guide suggests a deliberately permissive provisional ULB when history is missing, collecting one or two billing cycles before tightening. "Permissive" is an operational choice, not infinite spending authorization: align it with paid-usage policy, metered enforcement, and your approved exposure.
+<details>
+<summary>When there is no reliable consumption baseline</summary>
 
-Segment workloads by observed patterns: occasional chat, daily interactive development, and agent-heavy work may behave differently. Measure model and token/context consumption instead of inferring cost or productivity from job title.
+[Well-Architected](https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/) suggests a permissive provisional ULB and one or two billing cycles of observation before tightening. Permissive is not unlimited spending authorization: align paid-usage policy and metered enforcement with approved exposure. Measure actual workloads, not assumed productivity by job title.
 
-For an illustrative forecast, estimate total consumption from comparable observed workload, adjust for planned adoption, and subtract the applicable included allowance to estimate overage. Treat this as a scenario, not an invoice calculation: model mix, policy changes, included-usage controls, and enforced caps can change actual charges.
+Aggregate ULBs do not reserve the pool. A user may be blocked by a financial cap before reaching their ULB. Temporary individual overrides support optional expiry; record the reason and owner.
 
-## Leave headroom intentionally
-
-Review the relationship between ULBs and available metered funding. Aggregate ULBs are **not reservations** against the shared pool. If authorized individual consumption exceeds included credits, the difference can become metered usage. If financial caps cannot support it, people can be blocked before reaching their ULBs.
-
-Document expected variation for releases, onboarding, incidents, and time-bound experiments. Record an owner and review date for exceptions; individual ULBs support optional expiration according to the budget docs.
+</details>
 
 ## Your handoff checklist
 
-- The finance approver and workload owner agree on cap versus continuity.
-- Every scoped budget has an owner and a backup.
-- Identity and cost-center mapping have an accountable maintainer.
-- Users know what a block means and how to request a change.
-- A dated baseline and review cadence exist.
-- Preview adoption follows the enterprise's policy; unknown status is checked before rollout.
-
-Take this brief into [the implementation sequence](/implementation/). It is not complete until configuration matches the decisions.
+Finance and workload owners agree on enforcement; every control has an owner and backup; mappings and exceptions are maintained; users know the escalation route. Check preview policy and unknown release status before adoption. Then follow [the implementation sequence](/implementation/).

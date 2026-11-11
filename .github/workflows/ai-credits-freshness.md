@@ -102,8 +102,13 @@ Use UTC for all verification dates and ages.
    ledger between `<!-- freshness-source-ledger:start -->` and
    `<!-- freshness-source-ledger:end -->` in `docs/freshness-setup.md`.
    If guide files are missing, open a setup-blocker issue; do not invent them.
-   Also read the text and SVG labels in `public/diagrams/*.html`. If a source
-   change invalidates a diagram, open a blocker issue naming the diagram,
+   Also read editable `public/diagrams/*.excalidraw` text elements, their
+   `*.light.svg` and `*.dark.svg` exports, and standalone `*.html` wrappers.
+   Compare the editable claims, rendered labels, prose alternatives and worked
+   scenarios across both themes. Hypothetical amounts must remain labeled,
+   internally consistent, and never presented as recommended budgets.
+   If a source change invalidates a diagram, or the source and exports disagree,
+   open a blocker issue naming the editable source, affected exports,
    affected pages, and required correction. Do not edit diagram code or advance
    the affected pages' verification dates until a human resolves the mismatch.
 2. Inspect existing open `[freshness]` PRs and issues using read-only GitHub
