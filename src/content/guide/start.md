@@ -26,8 +26,8 @@ sources:
 Each conceptual lesson opens with an editable Excalidraw visual, followed by a worked scenario and the rules needed to apply it. Hypothetical examples teach behavior; they are not recommended budgets.
 
 <div class="reader-paths">
-<a class="reader-path" href="/ai-credits-guide/sellers/"><span>01</span><div><strong>I'm helping a customer plan</strong><small>Discover their operating model, frame the trade-offs, and leave with a clear implementation brief.</small></div><span class="path-arrow">↗</span></a>
-<a class="reader-path" href="/ai-credits-guide/implementation/"><span>02</span><div><strong>I'm setting this up</strong><small>Design ownership, configure layered controls, and establish the reporting and response loop.</small></div><span class="path-arrow">↗</span></a>
+<a class="reader-path" href="/ai-credits-guide/sellers/"><span>01</span><div><strong>I'm helping a customer plan</strong><small>Discover their operating model, frame the trade-offs, and leave with a clear implementation brief.</small></div><span class="path-arrow">→</span></a>
+<a class="reader-path" href="/ai-credits-guide/implementation/"><span>02</span><div><strong>I'm setting this up</strong><small>Design ownership, configure layered controls, and establish the reporting and response loop.</small></div><span class="path-arrow">→</span></a>
 </div>
 
 ## Four situations to practise

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { mkdir, readdir } from 'node:fs/promises';
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
 
 const lessons = ['understand', 'controls', 'planning', 'implementation', 'operate', 'reporting'];
 const shots = process.env.SCREENSHOT_DIR || 'test-results/screenshots';
@@ -158,3 +158,24 @@ function contrast(a: string, b: string) {
   const values = [luminance(a), luminance(b)].sort((x, y) => y - x);
   return (values[0] + .05) / (values[1] + .05);
 }
+
+test('monospace labels resolve to available platform fonts rather than Courier', async ({ page }) => {
+  await page.goto('./');
+  await page.evaluate(() => document.fonts.ready);
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('DOM.enable');
+  await cdp.send('CSS.enable');
+  const { root } = await cdp.send('DOM.getDocument');
+  const results: Record<string, { familyName: string; glyphCount: number }[]> = {};
+  for (const selector of ['.eyebrow', '.page-meta', '.edition', '.toc > div']) {
+    const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector });
+    const { fonts }: { fonts: { familyName: string; glyphCount: number }[] } =
+      await cdp.send('CSS.getPlatformFontsForNode', { nodeId });
+    expect(fonts.length, selector).toBeGreaterThan(0);
+    for (const font of fonts) expect(font.familyName, selector).not.toMatch(/^Courier/i);
+    results[selector] = fonts;
+  }
+  await mkdir(shots, { recursive: true });
+  await writeFile(`${shots}/platform-fonts.json`, JSON.stringify(results, null, 2));
+  await cdp.detach();
+});

@@ -1,7 +1,7 @@
 *{box-sizing:border-box}
 :root{
   --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;
-  --font-mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  --font-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   font-family:var(--font-sans);color-scheme:light;
   --bg:#f3f5f7;--surface:#fff;--inset:#f6f8fa;--ink:#1f2328;--body:#30363d;
   --muted:#59636e;--rule:#d1d9e0;--accent:#1a7f37;--link:#0550ae;--tint:#eaf6ed;

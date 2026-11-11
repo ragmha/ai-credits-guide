@@ -140,13 +140,17 @@ subtle square grid, system sans-serif typography, green section/numbering
 accents, blue links and compact bordered panels. The light counterpart uses
 cool gray and white surfaces with accessible green and blue accents.
 The chapter rail, visual-first lessons and reading column remain intact.
-No reference content, logo, announcement strip or unrelated features are copied.
+No reference content, announcement strip or unrelated features are copied.
+The header uses the Octicons `mark-github` artwork (MIT, see
+`public/licenses/octicons-MIT.txt`) at the user's request.
+GitHub's name and logo are GitHub, Inc. trademarks; this independent guide is
+not affiliated with or endorsed by GitHub, and logo use should be confirmed
+against the [brand guidelines](https://brand.github.com/foundations/logo)
+before wider publication.
 Diagrams use readable native sans-serif text with Excalidraw strokes and
 no network font dependency.
 The dev-only `clsx` pin preserves Astro's named export when Excalidraw's
 older transitive version would otherwise be hoisted to the project root.
-Legacy font redistribution licenses remain in `public/licenses/`; the page
-chrome now uses platform fonts without downloading custom web fonts.
 
 Theme defaults to the system preference; a visible select persists an
 override. The initial theme script runs before styles render. When browser
