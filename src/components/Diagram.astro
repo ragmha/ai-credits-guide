@@ -1,0 +1,62 @@
+---
+type DiagramName =
+  | 'credit-lifecycle'
+  | 'layered-guardrails'
+  | 'operating-loop'
+  | 'attribution-pipeline';
+
+interface Props {
+  name: DiagramName;
+  title: string;
+}
+
+const { name, title } = Astro.props;
+const heights: Record<DiagramName, number> = {
+  'credit-lifecycle': 1100,
+  'layered-guardrails': 1080,
+  'operating-loop': 1140,
+  'attribution-pipeline': 1060,
+};
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const src = `${base}diagrams/${name}.html`;
+const headingId = `${name}-heading`;
+---
+
+<figure class="diagram-embed" aria-labelledby={headingId}>
+  <h3 id={headingId}>{title}</h3>
+  <iframe
+    src={src}
+    title={title}
+    height={heights[name]}
+    loading="lazy"
+    data-diagram={name}
+  ></iframe>
+  <figcaption>
+    <a data-diagram-link={name} href={src} target="_blank" rel="noopener noreferrer">Open {title.toLowerCase()} full-size</a>
+  </figcaption>
+</figure>
+
+<style>
+  .diagram-embed {
+    min-width: 0;
+    margin: 2rem 0;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 8px;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 720px) {
+    iframe {
+      height: 1450px;
+    }
+  }
+</style>

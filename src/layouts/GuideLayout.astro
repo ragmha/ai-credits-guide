@@ -1,0 +1,138 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Diagram from '../components/Diagram.astro';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/playfair-display/latin-500.css';
+import '@fontsource/playfair-display/latin-600.css';
+import '@fontsource/schibsted-grotesk/latin-400.css';
+import '@fontsource/schibsted-grotesk/latin-500.css';
+import '@fontsource/schibsted-grotesk/latin-600.css';
+import '@fontsource/schibsted-grotesk/latin-700.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '../styles/global.css';
+
+interface Props {
+  page: CollectionEntry<'guide'>;
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { page, headings } = Astro.props;
+const pages = (await getCollection('guide')).sort((a, b) => a.data.order - b.data.order);
+const sections = [...new Set(pages.map((entry) => entry.data.section))];
+const current = pages.findIndex((entry) => entry.id === page.id);
+const previous = pages[current - 1];
+const next = pages[current + 1];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const href = (id: string) => id === 'start' ? `${base}/` : `${base}/${id}/`;
+const stale = Date.now() - new Date(`${page.data.verified}T00:00:00Z`).getTime() > 30 * 86400000;
+const diagramTitles = {
+  'credit-lifecycle': 'From included credits to metered usage',
+  'layered-guardrails': 'How budget guardrails fit together',
+  'operating-loop': 'Turn a budget alert into a decision',
+  'attribution-pipeline': 'From usage data to accountable decisions',
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={page.data.description} />
+    <meta name="color-scheme" content="light dark" />
+    <title>{page.data.title} · AI Credits Field Guide</title>
+    <script is:inline>
+      (() => {
+        let preference = 'system';
+        try { preference = localStorage.getItem('theme') || 'system'; } catch {}
+        const dark = preference === 'dark' || (preference === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.documentElement.dataset.preference = preference;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    <header class="topbar">
+      <a class="brand" href={`${base}/`} aria-label="AI Credits Field Guide home"><span class="brand-mark" aria-hidden="true">ai</span> Field Guide</a>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><span>Enterprise enablement</span><span aria-hidden="true">/</span><span>{page.data.section}</span></nav>
+      <label class="theme-label"><span aria-hidden="true">◐</span><span class="sr-only">Color theme</span><select id="theme" aria-label="Color theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    </header>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="edition">THE ENTERPRISE PLAYBOOK<span>AI credit budgeting</span></div>
+        <details class="chapter-nav" open>
+          <summary>Explore the guide <span aria-hidden="true">⌄</span></summary>
+          <nav aria-label="Guide chapters">
+            {sections.map((section, index) => (
+              <details class="chapter" open={section === page.data.section}>
+                <summary><span class="chapter-number">{String(index + 1).padStart(2, '0')}</span>{section}<span class="chevron" aria-hidden="true">›</span></summary>
+                <div class="chapter-pages">{pages.filter((entry) => entry.data.section === section).map((entry) => <a href={href(entry.id)} aria-current={entry.id === page.id ? 'page' : undefined}>{entry.data.title}</a>)}</div>
+              </details>
+            ))}
+          </nav>
+        </details>
+        <div class="sidebar-note">Built for the conversation.<br />Ready for implementation.<a href={`${base}/sources/`}>Sources & release status <span aria-hidden="true">↗</span></a></div>
+      </aside>
+      <main id="content">
+        <div class="article-grid">
+          <article>
+            <div class="eyebrow">{page.data.section}<span class="eyebrow-line"></span></div>
+            <h1>{page.data.title}</h1>
+            <p class="lede">{page.data.description}</p>
+            <div class="page-meta"><span>ENTERPRISE GUIDE</span><span>Reviewed {page.data.verified}</span>{stale && <strong class="status caution">Review overdue · verify against sources</strong>}</div>
+            <div class="prose"><slot /></div>
+            {page.data.diagram && <section class="diagram-section" aria-label="Visual explanation">
+              <div class="figure-label">THE BIG PICTURE</div>
+              <Diagram name={page.data.diagram} title={diagramTitles[page.data.diagram]} />
+            </section>}
+            <section class="source-note" aria-labelledby="page-sources">
+              <h2 id="page-sources">Sources & freshness</h2>
+              <p>Source review: <time datetime={page.data.verified}>{page.data.verified}</time>. This independent guide is not a contract or a substitute for your billing settings. Source links are authoritative; recommendations are labeled as guide advice.</p>
+              <ul>{page.data.sources.map((source) => <li><a href={source} target="_blank" rel="noopener noreferrer">{new URL(source).hostname} / {new URL(source).pathname.split('/').filter(Boolean).at(-1)?.replaceAll('-', ' ')} ↗</a></li>)}</ul>
+            </section>
+            <nav class="pagination" aria-label="Reading sequence">{previous ? <a href={href(previous.id)}><small>← PREVIOUS</small>{previous.data.title}</a> : <span></span>}{next && <a class="next" href={href(next.id)}><small>NEXT CHAPTER →</small>{next.data.title}</a>}</nav>
+            <footer class="article-footer">AI Credits Field Guide <span>Independent guidance. Official sources, clearly linked.</span></footer>
+          </article>
+          <aside class="toc" aria-label="On this page"><div>ON THIS PAGE</div>{headings.filter((h) => h.depth === 2).map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}<a href="#page-sources">Sources & freshness</a></aside>
+        </div>
+      </main>
+    </div>
+    <script>
+      const select = document.querySelector<HTMLSelectElement>('#theme')!;
+      const media = matchMedia('(prefers-color-scheme: dark)');
+      const mobile = matchMedia('(max-width: 760px)');
+      const navigation = document.querySelector<HTMLDetailsElement>('.chapter-nav')!;
+      function syncNavigation() {
+        navigation.open = !mobile.matches;
+      }
+      syncNavigation();
+      mobile.addEventListener('change', syncNavigation);
+      select.value = document.documentElement.dataset.preference || 'system';
+      function applyTheme() {
+        const preference = select.value;
+        const theme = preference === 'system' ? (media.matches ? 'dark' : 'light') : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.preference = preference;
+        document.querySelectorAll<HTMLIFrameElement>('[data-diagram]').forEach((frame) => {
+          const url = new URL(frame.src);
+          url.hash = theme;
+          if (url.href !== frame.src) frame.src = url.href;
+        });
+        document.querySelectorAll<HTMLAnchorElement>('[data-diagram-link]').forEach((link) => {
+          const url = new URL(link.href);
+          url.hash = theme;
+          link.href = url.href;
+        });
+      }
+      select.addEventListener('change', () => {
+        try { localStorage.setItem('theme', select.value); } catch {}
+        applyTheme();
+      });
+      media.addEventListener('change', applyTheme);
+      applyTheme();
+    </script>
+  </body>
+</html>

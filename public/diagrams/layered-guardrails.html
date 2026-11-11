@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Guardrails are not an allocation tree</title>
+  <style>
+    :root{color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    :root[data-theme="dark"]{color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}}
+    :root:has(#dark:target){color-scheme:dark;--paper:#18181b;--ink:#f4f4f5;--muted:#a1a1aa;--accent:#a78bfa;--rule:#3f3f46;--tint:#272132}
+    :root:has(#light:target){color-scheme:light;--paper:#fafafa;--ink:#18181b;--muted:#52525b;--accent:#7c3aed;--rule:#d4d4d8;--tint:#f0eafa}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 system-ui,Arial,sans-serif}
+    main{max-width:1100px;min-width:0;margin:auto;padding:24px}header{margin-bottom:20px}.eyebrow{font:500 11px/1.5 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+    h1{font:500 30px/1.2 Georgia,serif;margin:8px 0 12px}p{margin:8px 0;color:var(--muted)}
+    .diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:8px}.diagram-container:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    svg{display:block;width:100%;min-width:960px;background:var(--paper)}svg text{fill:var(--ink);font-family:system-ui,Arial,sans-serif}.layer{fill:var(--paper);stroke:var(--muted);stroke-width:1}.focal{fill:var(--tint);stroke:var(--accent);stroke-width:1.5}.name{font-size:16px;font-weight:600}.sub{font-size:12px;fill:var(--muted)}.tag{font:11px ui-monospace,monospace;fill:var(--muted);letter-spacing:.04em}.rule{stroke:var(--rule)}
+    footer{margin-top:20px;border-top:1px solid var(--rule);padding-top:12px}footer p{font-size:13px}a{color:var(--accent);text-underline-offset:3px}strong{color:var(--ink)}.sources{font-size:12px}
+    @media(max-width:600px){main{padding:16px}h1{font-size:26px}}
+    @media print{.diagram-container{overflow-x:visible}svg{min-width:0}main{padding:0}}
+  </style>
+</head>
+<body>
+<span id="light" hidden></span><span id="dark" hidden></span>
+<main>
+  <header>
+    <div class="eyebrow">02 / Control catalog · Where each boundary applies</div>
+    <h1>Guardrails are not an allocation tree</h1>
+    <p>These controls govern different consumption surfaces. Rows show scope and purpose—not a sequential evaluation order or inherited funding.</p>
+  </header>
+  <div class="diagram-container" tabindex="0" role="region" aria-label="Layered guardrails diagram; scroll horizontally on smaller screens">
+    <svg viewBox="0 0 960 560" role="img" aria-labelledby="layered-guardrails-title layered-guardrails-desc">
+      <title id="layered-guardrails-title">Guardrails are not an allocation tree</title>
+      <desc id="layered-guardrails-desc">User consumption caps, cost-center included-usage controls, and metered spending limits cover different scopes with distinct enforcement choices.</desc>
+      <text x="40" y="36" class="tag">SURFACE</text><text x="176" y="36" class="tag">CONTROL / COVERAGE</text><text x="620" y="36" class="tag">ACTOR / WHEN / ENFORCEMENT</text>
+      <g data-node="user">
+        <rect x="40" y="56" width="880" height="88" rx="6" class="focal"/>
+        <text x="60" y="88" class="tag">PER USER</text>
+        <text x="176" y="88" class="name">Applicable user-level budget (ULB)</text>
+        <text x="176" y="112" class="sub">One person’s included + metered consumption</text>
+        <text x="620" y="84" class="sub">Admin sets · platform enforces</text>
+        <text x="620" y="106" class="sub">Both phases · always a hard stop</text>
+        <text x="620" y="128" class="sub">Exception: authorized ULB override</text>
+      </g>
+      <g data-node="included-control">
+        <rect x="40" y="152" width="880" height="88" rx="6" class="layer"/>
+        <text x="60" y="184" class="tag">POOL DRAW</text>
+        <text x="176" y="184" class="name">Cost-center included-usage control</text>
+        <text x="176" y="208" class="sub">License-funded pool access for a group</text>
+        <text x="620" y="180" class="sub">Admin enables · platform calculates cap</text>
+        <text x="620" y="202" class="sub">Included phase · block or paid overage</text>
+        <text x="620" y="224" class="sub">Separate from its metered budget</text>
+      </g>
+      <g data-node="cost-center">
+        <rect x="40" y="248" width="880" height="88" rx="6" class="layer"/>
+        <text x="60" y="280" class="tag">COST CENTER</text>
+        <text x="176" y="280" class="name">Group metered budget</text>
+        <text x="176" y="304" class="sub">Shared metered charges attributed to the group</text>
+        <text x="620" y="276" class="sub">Billing manager + cost owner</text>
+        <text x="620" y="298" class="sub">Metered phase · alert or enforced stop</text>
+        <text x="620" y="320" class="sub">Owner decides continuity trade-off</text>
+      </g>
+      <g data-node="organization">
+        <rect x="40" y="344" width="880" height="88" rx="6" class="layer"/>
+        <text x="60" y="376" class="tag">ORGANIZATION</text>
+        <text x="176" y="376" class="name">Organization metered budget</text>
+        <text x="176" y="400" class="sub">Users whose Copilot seats bill to the organization</text>
+        <text x="620" y="372" class="sub">Organization owner / billing manager</text>
+        <text x="620" y="394" class="sub">Metered phase · alert or enforced stop</text>
+        <text x="620" y="416" class="sub">Not a child allocation of the enterprise</text>
+      </g>
+      <g data-node="enterprise">
+        <rect x="40" y="440" width="880" height="88" rx="6" class="layer"/>
+        <text x="60" y="472" class="tag">ENTERPRISE</text>
+        <text x="176" y="472" class="name">Enterprise metered spending limit</text>
+        <text x="176" y="496" class="sub">Explicitly include or exclude cost-center usage</text>
+        <text x="620" y="468" class="sub">Enterprise owner / billing manager</text>
+        <text x="620" y="490" class="sub">Metered phase · alert or enforced stop</text>
+        <text x="620" y="512" class="sub">Exclusion delegates financial exposure</text>
+      </g>
+      <text x="40" y="548" class="tag">ACCENT: CROSS-PHASE PERSONAL CAP · NEUTRAL: OTHER APPLICABLE CONTROL SURFACES</text>
+    </svg>
+  </div>
+  <footer>
+    <p><strong>Prose alternative.</strong> ULBs cap each person across both phases. Within the ULB family, specificity is <strong>individual → cost-center ULB → universal</strong>; the most specific applies. A cost-center ULB remains a per-person limit, not the group’s metered budget.</p>
+    <p><strong>Pool protection is separate.</strong> Cost-center included-usage controls cap the group’s draw using its license-funded allowance. At that cap, configured behavior can block members or move additional usage to paid overage, even before the enterprise pool is exhausted.</p>
+    <p><strong>Make the continuity choice explicit.</strong> Metered budgets alert unless “Stop usage when budget limit is reached” is enabled. An applicable enforced limit can block usage despite remaining headroom elsewhere. Alert-only controls preserve continuity but do not cap charges. The Well-Architected recommendation favors alert-led enterprise monitoring; choose stops according to financial and interruption risk.</p>
+    <p class="sources" style="overflow-wrap:anywhere">Sources, checked 10 Nov 2026:<br>Billing: https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing<br>Budget behavior and ULB precedence: https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets<br>Governance trade-offs: https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/</p>
+    <p class="sources">System fonts keep this standalone diagram self-contained.</p>
+  </footer>
+</main>
+</body>
+</html>
