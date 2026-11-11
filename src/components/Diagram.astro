@@ -1,22 +1,47 @@
 ---
-type DiagramName =
-  | 'credit-lifecycle'
-  | 'layered-guardrails'
-  | 'operating-loop'
-  | 'attribution-pipeline';
+const diagrams = {
+  'credit-lifecycle': {
+    title: 'Follow the credits, not the seats',
+    description: 'Business and Enterprise licenses fund a shared included pool. After it is exhausted, paid usage needs policy permission and available enforced headroom. Copilot access has no included pool.',
+  },
+  'layered-guardrails': {
+    title: 'Why a user can be blocked while credits remain',
+    description: 'Resolve individual, cost-center, then universal ULB precedence. An exhausted applicable ULB blocks the user before remaining shared credits or metered funding can help. The amounts shown are hypothetical, not recommended budgets.',
+  },
+  'cost-center-controls': {
+    title: 'One shared pool, two different team controls',
+    description: 'A cost-center included-usage control limits its draw on the shared pool. A cost-center metered budget limits additional charges. Neither is a private wallet or a transfer between teams.',
+  },
+  'cap-or-continuity': {
+    title: 'Same threshold, different operational outcome',
+    description: 'A metered hard stop blocks credit-consuming work at its limit. An alert-only threshold keeps work and charges running while an owner responds. ULBs remain hard stops in either design.',
+  },
+  'agent-meters': {
+    title: 'One agent workload, two meters',
+    description: 'Copilot code review consumes model/token AI credits and Actions runner minutes separately. Plan and monitor both; an AI-credit budget does not cap Actions spending.',
+  },
+  'rollout-roadmap': {
+    title: 'Build the operating model before automation',
+    description: 'Start with ownership, enterprise controls and attribution. Adopt cost-center and per-user rules with guidance and responders. Advance through monthly review and automation of a proven process.',
+  },
+  'operating-loop': {
+    title: 'Turn an alert into an owned decision',
+    description: 'Identify the actual limiting control, route the decision to its owner, apply an approved change, confirm recovery and review the result. An alert never authorizes extra spend by itself.',
+  },
+  'attribution-pipeline': {
+    title: 'From usage to an accountable cost owner',
+    description: 'Map the source usage report to owners, keep unmapped records visible and reconcile totals and periods. Start with showback; chargeback requires finance agreement.',
+  },
+};
+
+type DiagramName = keyof typeof diagrams;
 
 interface Props {
   name: DiagramName;
-  title: string;
 }
 
-const { name, title } = Astro.props;
-const heights: Record<DiagramName, number> = {
-  'credit-lifecycle': 1100,
-  'layered-guardrails': 1080,
-  'operating-loop': 1140,
-  'attribution-pipeline': 1060,
-};
+const { name } = Astro.props;
+const { title, description } = diagrams[name];
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const src = `${base}diagrams/${name}.html`;
 const headingId = `${name}-heading`;
@@ -24,39 +49,70 @@ const headingId = `${name}-heading`;
 
 <figure class="diagram-embed" aria-labelledby={headingId}>
   <h3 id={headingId}>{title}</h3>
-  <iframe
-    src={src}
-    title={title}
-    height={heights[name]}
-    loading="lazy"
-    data-diagram={name}
-  ></iframe>
+  <div class="diagram-tools">
+    <button class="diagram-zoom" type="button" data-diagram-size aria-pressed="false" aria-controls={`${name}-viewport`} hidden>Zoom figure</button>
+    <a data-diagram-link={name} href={src} target="_blank" rel="noopener noreferrer">Open full-size</a>
+  </div>
+  <p class="diagram-hint">Fits your screen. Zoom for larger labels; scroll with touch or arrow keys.</p>
+  <div id={`${name}-viewport`} class="diagram-scroll" tabindex="0" role="region" aria-label={`${title}. When zoomed, scroll horizontally to explore.`}>
+    <img class="diagram-light" src={`${base}diagrams/${name}.light.svg`} alt={description} width="640" data-diagram={name} />
+    <img class="diagram-dark" src={`${base}diagrams/${name}.dark.svg`} alt={description} width="640" data-diagram={name} />
+  </div>
   <figcaption>
-    <a data-diagram-link={name} href={src} target="_blank" rel="noopener noreferrer">Open {title.toLowerCase()} full-size</a>
+    <p>{description}</p>
+    <div class="diagram-links">
+      <a href={`${base}diagrams/${name}.excalidraw`} download>Download editable Excalidraw</a>
+    </div>
   </figcaption>
 </figure>
 
 <style>
   .diagram-embed {
     min-width: 0;
-    margin: 2rem 0;
+    margin: 1rem 0 2rem;
   }
 
-  iframe {
+  h3 {
+    color: var(--ink);
+    font: 650 19px/1.4 var(--font-sans);
+    margin: 0 0 16px;
+  }
+
+  .diagram-tools { display: flex; align-items: center; gap: 20px; margin-bottom: 12px; font-size: 13px; }
+  .diagram-zoom { display: none; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 14px; cursor: pointer; }
+  .diagram-zoom:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .diagram-hint { display: none; }
+  @media (max-width: 760px) {
+    .diagram-hint { display: block; color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+    .diagram-zoom:not([hidden]) { display: inline-block; }
+    .diagram-scroll img { min-width: 0; }
+    .diagram-zoomed .diagram-scroll img { min-width: 640px; }
+  }
+
+  .diagram-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--bg);
+  }
+
+  img {
     display: block;
     width: 100%;
-    border: 0;
-    border-radius: 8px;
+    min-width: 640px;
+    height: auto;
   }
 
   figcaption {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
   }
 
-  @media (max-width: 720px) {
-    iframe {
-      height: 1450px;
-    }
-  }
+  figcaption p { margin: 0 0 8px; }
+  .diagram-links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .diagram-dark { display: none; }
+  :global([data-theme=dark]) .diagram-light { display: none; }
+  :global([data-theme=dark]) .diagram-dark { display: block; }
 </style>

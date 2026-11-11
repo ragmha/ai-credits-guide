@@ -16,6 +16,10 @@ sources:
 - You can map discovery answers to the right control.
 - You can leave a practical handoff for finance and platform admins.
 
+## Worked scenario: two incompatible expectations
+
+**Hypothetical discovery:** Finance wants no paid overage. The platform owner wants credit-consuming work to continue after included credits run out. Resolve that trade-off with the financial approver before proposing a configuration; a threshold cannot satisfy both. Use the [cap-versus-continuity visual](/controls/#strict-cap-or-continuity) to frame the decision.
+
 ## Discover before prescribing
 
 The following is **guide advice** derived from the Well-Architected decision framework.
@@ -31,13 +35,10 @@ The following is **guide advice** derived from the Well-Architected decision fra
 | Who responds when an alert fires or work stops? | Operational ownership and escalation gap | [Operations](/operate/) |
 | What does the pilot actually show? | Data-backed baseline versus provisional limits | [Implementation](/implementation/) |
 
-## Identify the next useful engagement
+No approver or continuity decision? Start with planning. Decisions agreed but attribution missing? Start with reporting. Both ready? Walk through the implementation pilot before automating.
 
-If the customer cannot name a financial approver or decide whether work may stop, start with the planning workshop. If those decisions exist but attribution does not, focus on reporting. If both are ready, walk the platform owner through implementation and the pilot checks.
-
-For a mature customer, review exception volume, assignment quality, model/workload shifts, and forecasting before proposing more automation.
-
-## Avoid these promises
+<details>
+<summary>Avoid these promises</summary>
 
 - "Every seat has a private balance." Included credits are pooled.
 - "This enterprise budget includes your licenses." It limits metered charges, not seat fees.
@@ -47,6 +48,8 @@ For a mature customer, review exception volume, assignment quality, model/worklo
 - "It's documented, so it must be GA." Release status needs evidence.
 
 Do not quote future or unverified allowances. Link the current pricing/billing source, date the assumption, and confirm the customer's commercial terms through the proper process.
+
+</details>
 
 ## Leave a one-page implementation brief
 

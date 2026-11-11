@@ -1,59 +1,51 @@
 ---
-title: Understand AI credits
+title: Follow the credits
 section: The billing model
 order: 2
-description: Separate the shared allowance, individual consumption, and additional charges before choosing a budget.
+description: See where included credits come from, when paid usage starts, and why an agent workload can have two meters.
 verified: "2026-11-10"
 diagram: credit-lifecycle
+scenarioDiagram: agent-meters
 sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents
+  - https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/
+  - https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/
+  - https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot/
 ---
 
 ## What you will learn
 
-- You can explain how an included pool becomes metered spending.
-- You can identify what a user-level budget measures.
-- You can avoid treating a spending limit as a cap on license fees.
+- You can trace the shared pool into the metered phase.
+- You can separate credit consumption from license fees and Actions usage.
 
-## One billing unit, different kinds of cost
+## Read the picture
 
-GitHub AI Credits are the billing unit for metered Copilot usage. Input, output, and cached tokens are priced by model and converted into credits. The current [billing documentation](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing#what-are-github-ai-credits) states **1 AI credit = $0.01 USD**. Budgets are configured in US dollars; consumption is displayed in AI credits.
+Business and Enterprise licenses contribute to a **shared monthly pool**, not private user wallets. After that pool runs out, credit-consuming work needs the **AI credits paid usage** policy and remaining headroom under applicable enforced limits.
 
-Copilot Chat, Copilot CLI, Copilot cloud agent, and Copilot Spaces consume AI credits. See the [status register](/sources/) before adopting capabilities whose release phase is not established by that source. Inline code completions and next edit suggestions do not consume AI credits and remain available at an enforced credit limit.
+**Copilot access skips the included-pool stage.** It has no included allowance; credit-consuming usage is metered from first use. The [October 28 announcement](https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot/) establishes account-team availability for GitHub Enterprise Cloud, with self-serve availability staged.
 
-**Third-party coding agents — <span class="status caution">public preview - use with caution</span>** consume AI credits and GitHub Actions minutes, which are separate meters. Include both in a workload estimate; an AI credits budget is not an Actions spending limit. See [official agent documentation](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents).
+<details>
+<summary>Check the allowance, reset and paid-usage rules</summary>
 
-## Included first, metered second
-
-For Copilot Business and Copilot Enterprise, assigned licenses contribute to a **shared pool at the billing entity level**, not a guaranteed private allocation per user. Usage draws from the pool first.
+The [billing docs](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing) state **1 AI credit = $0.01 USD**. Model input, output and cached tokens determine consumption. Budgets are configured in US dollars.
 
 | Plan | Included credits per assigned license per month |
 | --- | --- |
 | Copilot Business | 1,900 |
 | Copilot Enterprise | 3,900 |
 
-These are source-verified amounts as of the page's review date, not contractual promises. [Check current allowances](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing#included-credits-for-copilot-business-and-copilot-enterprise) before forecasting or quoting.
+Check [current allowances](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing#included-credits-for-copilot-business-and-copilot-enterprise) before quoting. Credits reset at **00:00 UTC on the first calendar day monthly**, with no rollover. Adding licenses increases the pool immediately; removals reduce it at the next billing cycle.
 
-When the pool is exhausted, additional usage is metered if the **AI credits paid usage** policy permits it and applicable enforced limits allow the request. Additional usage is enabled by default for these plans; explicitly disable the policy if no overage is authorized. Do not assume a newly assigned license means paid usage is disabled.
+Additional usage is enabled by default for Business and Enterprise. Disable the paid-usage policy if overage is not authorized. Copilot Chat, CLI, cloud agent and Spaces consume credits; code completions and next edit suggestions do not, and remain available at a credit limit. See the [release register](/sources/) for status.
 
-**Copilot access has no included allowance.** Its AI credit-consuming usage is metered from first use, and paid usage must be enabled for those features to work.
+</details>
 
-## The reset is not your invoice date
+## Worked scenario: an agent-heavy review day
 
-Included credits reset at **00:00:00 UTC on the first day of each calendar month** and do not roll over. Adding licenses increases the pool immediately; removing licenses reduces it at the next billing cycle. Do not treat unused credits as a balance to carry forward.
+**Hypothetical use case:** A team enables Copilot code review for a large migration. The [June 1 release](https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/) confirms two meters: AI credits for model use and Actions minutes for runner work. An AI-credit cap does not cap Actions. Review both before scaling; no example here is a recommended spend.
 
-## Three numbers that must not be confused
+**Third-party coding agents — <span class="status caution">public preview - use with caution</span>** also consume both meters. Check the [official agent documentation](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents) before adoption.
 
-| Number | Meaning | What it does not do |
-| --- | --- | --- |
-| Forecast | An estimate based on usage, workforce, and workload changes | It does not enforce anything |
-| Consumption or spending cap | A configured product control, with enforcement semantics | It is not procurement approval |
-| Purchase authorization | Your organization's approval to incur charges | It does not configure GitHub |
-
-Enterprise metered budgets do **not** cap license fees. Include licenses, metered overage, and separate service meters in your financial view.
-
-## Read the lifecycle diagram
-
-The diagram below separates the included and metered phases. A user-level budget can stop a request in either phase. The picture is conceptual: use [the control evaluation detail](/controls/#what-gets-checked-first) for request-level rules, included-usage controls, and exclusions.
+**Keep separate:** a forecast estimates spend; a cap enforces a product limit; purchase authorization approves charges. None replaces the others, and metered budgets do not cap license fees. The [transition announcement](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/) supplies billing context, not a customer's spending authority.

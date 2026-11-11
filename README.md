@@ -1,11 +1,13 @@
-# AI Credits Field Guide
+# AI Credits Learning Guide
 
 A source-backed enterprise guide to GitHub AI credit budgeting for sellers,
 finance stakeholders, and enterprise/platform administrators.
 
-Nine chapters cover the billing model, layered controls, planning,
-implementation, operations, attribution, discovery, and feature status. Four
-accessible SVG diagrams have light/dark themes and prose alternatives.
+Visual-first lessons cover the billing model, layered controls, planning,
+implementation, operations, attribution, discovery, and feature status.
+Eight genuine editable Excalidraw diagrams have static light/dark SVG
+exports and prose alternatives. Worked scenarios illustrate behavior,
+not recommended budgets or real customer data.
 
 ## Run locally
 
@@ -32,9 +34,9 @@ required to serve the guide.
 ## Browser checks and screenshots
 
 The Playwright check exercises system/light/dark themes, persisted choice,
-internal project-base links, all four diagrams, narrow-screen containment,
-and mobile navigation. It captures the home, implementation, and controls
-pages in both themes, plus diagram detail and mobile screenshots.
+internal project-base links, all diagrams and editable downloads, narrow-screen containment,
+and narrow-to-wide navigation. It captures all six conceptual lessons in
+both themes at desktop and mobile widths.
 
 ```sh
 # Uses installed Google Chrome by default.
@@ -89,8 +91,31 @@ documented manual hosted check.
 ## Editorial conventions
 
 Content lives in `src/content/guide/*.md`. Each page has a title, section,
-order, description, ISO `verified` date, and canonical `sources`. Diagrams
-are self-contained HTML in `public/diagrams/`, embedded by `Diagram.astro`.
+order, description, ISO `verified` date, and canonical `sources`. Conceptual
+lessons declare a primary `diagram` shown before their supporting text;
+`scenarioDiagram` adds a second worked-example figure where useful.
+`Diagram.astro` displays static exports with a downloadable native source.
+
+## Editing the diagrams
+
+Open `public/diagrams/<name>.excalidraw` in Excalidraw to edit its native
+boxes, text and connectors. Commit that source with both themed exports and
+the standalone HTML wrapper. The existing diagram URLs remain available.
+
+```sh
+bun run diagrams:export
+bun run test:diagrams
+```
+
+The export check uses Excalidraw's real import/export implementation; the
+reader site ships static SVGs, not an Excalidraw editor or React runtime.
+Keep the locked canvas element: its native `customData` carries the
+accessible title and description through ordinary Excalidraw saves.
+Keep source labels, exports, prose alternatives and scenario arithmetic
+consistent. Regenerate after changing a native source rather than editing
+an exported SVG by hand. Freshness automation audits every format read-only.
+
+### Content rules
 
 - Cite primary sources beside numerical and behavioral claims.
 - Advance a page's review date only after checking every material claim and
@@ -110,21 +135,26 @@ and Agentic Workflows GA status are sourced independently.
 
 ## Design and scope decisions
 
-The requested learning-page reference informs the serif heading, chapter
-sidebar, breadcrumb, restrained violet/zinc palette, and reading column.
-Playfair Display, Inter, Schibsted Grotesk, and IBM Plex Mono are intentional
-reference-matched font choices, bundled locally from Fontsource with system fallbacks.
-Standalone diagrams use Georgia and native sans/monospace fonts so they remain
-self-contained, offline-capable, and compatible with the diagram safety check.
-Font redistribution licenses for the main site are in `public/licenses/`.
-No reference branding or assets are copied.
+The requested governance-training reference informs the near-black canvas,
+subtle square grid, system sans-serif typography, green section/numbering
+accents, blue links and compact bordered panels. The light counterpart uses
+cool gray and white surfaces with accessible green and blue accents.
+The chapter rail, visual-first lessons and reading column remain intact.
+No reference content, logo, announcement strip or unrelated features are copied.
+Diagrams use readable native sans-serif text with Excalidraw strokes and
+no network font dependency.
+The dev-only `clsx` pin preserves Astro's named export when Excalidraw's
+older transitive version would otherwise be hoisted to the project root.
+Legacy font redistribution licenses remain in `public/licenses/`; the page
+chrome now uses platform fonts without downloading custom web fonts.
 
 Theme defaults to the system preference; a visible select persists an
 override. The initial theme script runs before styles render. When browser
 storage is unavailable, the current selection works but cannot persist.
 Diagrams follow the chosen theme.
 
-Assumptions: GitHub Enterprise Cloud is the main audience; budget amounts
+Assumptions: visual-first lessons with worked scenarios, not a full in-site
+drawing editor; GitHub Enterprise Cloud is the main audience; budget amounts
 must come from customer approvals and observed consumption; this is an
 independent implementation guide, not commercial terms. No AI chat,
-telemetry, fictional customer data, or universal budget calculator is included.
+telemetry, purported customer data, or universal budget calculator is included.

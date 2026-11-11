@@ -1,18 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Diagram from '../components/Diagram.astro';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-500.css';
-import '@fontsource/inter/latin-600.css';
-import '@fontsource/inter/latin-700.css';
-import '@fontsource/playfair-display/latin-500.css';
-import '@fontsource/playfair-display/latin-600.css';
-import '@fontsource/schibsted-grotesk/latin-400.css';
-import '@fontsource/schibsted-grotesk/latin-500.css';
-import '@fontsource/schibsted-grotesk/latin-600.css';
-import '@fontsource/schibsted-grotesk/latin-700.css';
-import '@fontsource/ibm-plex-mono/latin-400.css';
-import '@fontsource/ibm-plex-mono/latin-500.css';
 import '../styles/global.css';
 
 interface Props {
@@ -28,12 +16,8 @@ const next = pages[current + 1];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const href = (id: string) => id === 'start' ? `${base}/` : `${base}/${id}/`;
 const stale = Date.now() - new Date(`${page.data.verified}T00:00:00Z`).getTime() > 30 * 86400000;
-const diagramTitles = {
-  'credit-lifecycle': 'From included credits to metered usage',
-  'layered-guardrails': 'How budget guardrails fit together',
-  'operating-loop': 'Turn a budget alert into a decision',
-  'attribution-pipeline': 'From usage data to accountable decisions',
-};
+const titleWords = page.data.title.split(' ');
+const titleEmphasis = page.id === 'start' ? titleWords.splice(-3).join(' ') : '';
 ---
 <!doctype html>
 <html lang="en">
@@ -42,7 +26,7 @@ const diagramTitles = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={page.data.description} />
     <meta name="color-scheme" content="light dark" />
-    <title>{page.data.title} · AI Credits Field Guide</title>
+    <title>{page.data.title} · AI Credits Learning Guide</title>
     <script is:inline>
       (() => {
         let preference = 'system';
@@ -56,13 +40,16 @@ const diagramTitles = {
   <body>
     <a class="skip" href="#content">Skip to content</a>
     <header class="topbar">
-      <a class="brand" href={`${base}/`} aria-label="AI Credits Field Guide home"><span class="brand-mark" aria-hidden="true">ai</span> Field Guide</a>
+      <a class="brand" href={`${base}/`} aria-label="AI Credits Learning Guide home">
+        <svg class="brand-mark" aria-hidden="true" viewBox="0 0 16 16" width="30" height="30"><path d="M6.766 11.328c-2.063-.25-3.516-1.734-3.516-3.656 0-.781.281-1.625.75-2.188-.203-.515-.172-1.609.063-2.062.625-.078 1.468.25 1.968.703.594-.187 1.219-.281 1.985-.281.765 0 1.39.094 1.953.265.484-.437 1.344-.765 1.969-.687.218.422.25 1.515.046 2.047.5.593.766 1.39.766 2.203 0 1.922-1.453 3.375-3.547 3.64.531.344.89 1.094.89 1.954v1.625c0 .468.391.734.86.547C13.781 14.359 16 11.53 16 8.03 16 3.61 12.406 0 7.984 0 3.563 0 0 3.61 0 8.031a7.88 7.88 0 0 0 5.172 7.422c.422.156.828-.125.828-.547v-1.25c-.219.094-.5.156-.75.156-1.031 0-1.64-.562-2.078-1.609-.172-.422-.36-.672-.719-.719-.187-.015-.25-.093-.25-.187 0-.188.313-.328.625-.328.453 0 .844.281 1.25.86.313.452.64.655 1.031.655s.641-.14 1-.5c.266-.265.47-.5.657-.656"/></svg>
+        Learning Guide
+      </a>
       <nav class="breadcrumbs" aria-label="Breadcrumb"><span>Enterprise enablement</span><span aria-hidden="true">/</span><span>{page.data.section}</span></nav>
       <label class="theme-label"><span aria-hidden="true">◐</span><span class="sr-only">Color theme</span><select id="theme" aria-label="Color theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
     </header>
     <div class="shell">
       <aside class="sidebar">
-        <div class="edition">THE ENTERPRISE PLAYBOOK<span>AI credit budgeting</span></div>
+        <div class="edition">GUIDE CONTENTS<span>AI credit budgeting</span></div>
         <details class="chapter-nav" open>
           <summary>Explore the guide <span aria-hidden="true">⌄</span></summary>
           <nav aria-label="Guide chapters">
@@ -80,13 +67,17 @@ const diagramTitles = {
         <div class="article-grid">
           <article>
             <div class="eyebrow">{page.data.section}<span class="eyebrow-line"></span></div>
-            <h1>{page.data.title}</h1>
+            <h1>{titleWords.join(' ')}{titleEmphasis && <> <span class="title-emphasis">{titleEmphasis}</span></>}</h1>
             <p class="lede">{page.data.description}</p>
             <div class="page-meta"><span>ENTERPRISE GUIDE</span><span>Reviewed {page.data.verified}</span>{stale && <strong class="status caution">Review overdue · verify against sources</strong>}</div>
-            <div class="prose"><slot /></div>
             {page.data.diagram && <section class="diagram-section" aria-label="Visual explanation">
-              <div class="figure-label">THE BIG PICTURE</div>
-              <Diagram name={page.data.diagram} title={diagramTitles[page.data.diagram]} />
+              <div class="figure-label">VISUAL LESSON</div>
+              <Diagram name={page.data.diagram} />
+            </section>}
+            <div class="prose"><slot /></div>
+            {page.data.scenarioDiagram && <section class="diagram-section" aria-label="Scenario visual">
+              <div class="figure-label">APPLY THE CONCEPT</div>
+              <Diagram name={page.data.scenarioDiagram} />
             </section>}
             <section class="source-note" aria-labelledby="page-sources">
               <h2 id="page-sources">Sources & freshness</h2>
@@ -94,7 +85,7 @@ const diagramTitles = {
               <ul>{page.data.sources.map((source) => <li><a href={source} target="_blank" rel="noopener noreferrer">{new URL(source).hostname} / {new URL(source).pathname.split('/').filter(Boolean).at(-1)?.replaceAll('-', ' ')} ↗</a></li>)}</ul>
             </section>
             <nav class="pagination" aria-label="Reading sequence">{previous ? <a href={href(previous.id)}><small>← PREVIOUS</small>{previous.data.title}</a> : <span></span>}{next && <a class="next" href={href(next.id)}><small>NEXT CHAPTER →</small>{next.data.title}</a>}</nav>
-            <footer class="article-footer">AI Credits Field Guide <span>Independent guidance. Official sources, clearly linked.</span></footer>
+            <footer class="article-footer">AI Credits Learning Guide <span>Independent guidance. Official sources, clearly linked.</span></footer>
           </article>
           <aside class="toc" aria-label="On this page"><div>ON THIS PAGE</div>{headings.filter((h) => h.depth === 2).map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}<a href="#page-sources">Sources & freshness</a></aside>
         </div>
@@ -110,17 +101,20 @@ const diagramTitles = {
       }
       syncNavigation();
       mobile.addEventListener('change', syncNavigation);
+      document.querySelectorAll<HTMLButtonElement>('[data-diagram-size]').forEach((button) => {
+        button.hidden = false;
+        button.addEventListener('click', () => {
+          const zoomed = button.closest('figure')!.classList.toggle('diagram-zoomed');
+          button.setAttribute('aria-pressed', String(zoomed));
+          button.textContent = zoomed ? 'Fit figure to screen' : 'Zoom figure';
+        });
+      });
       select.value = document.documentElement.dataset.preference || 'system';
       function applyTheme() {
         const preference = select.value;
         const theme = preference === 'system' ? (media.matches ? 'dark' : 'light') : preference;
         document.documentElement.dataset.theme = theme;
         document.documentElement.dataset.preference = preference;
-        document.querySelectorAll<HTMLIFrameElement>('[data-diagram]').forEach((frame) => {
-          const url = new URL(frame.src);
-          url.hash = theme;
-          if (url.href !== frame.src) frame.src = url.href;
-        });
         document.querySelectorAll<HTMLAnchorElement>('[data-diagram-link]').forEach((link) => {
           const url = new URL(link.href);
           url.hash = theme;

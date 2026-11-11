@@ -1,72 +1,64 @@
 ---
-title: Budgets are layered guardrails
+title: Find the control that stops the request
 section: Budgets & controls
 order: 3
-description: Pick a control for the outcome you need. A team spending limit and a person's consumption cap solve different problems.
+description: Work through a blocked-user example, then compare a strict financial cap with continuity-first monitoring.
 verified: "2026-11-10"
 diagram: layered-guardrails
+scenarioDiagram: cap-or-continuity
 sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
+  - https://docs.github.com/en/billing/how-tos/set-up-budgets
+  - https://docs.github.com/en/billing/concepts/budgets-and-alerts
+  - https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/
+  - https://github.blog/changelog/2026-06-30-per-user-ai-credit-budgets-available-for-cost-centers/
+  - https://github.blog/changelog/2026-07-02-cost-centers-now-support-included-usage-caps/
 ---
 
 ## What you will learn
 
-- You can match each control to its scope and enforcement behavior.
-- You can explain why unused team budget does not unblock a user.
-- You can choose strict financial enforcement or continuity deliberately.
+- You can diagnose a block without raising the wrong budget.
+- You can choose enforcement deliberately and identify cross-product effects.
 
-## Match the control to the question
+## Worked scenario: credits remain, but the developer is blocked
 
-The controls below are documented capabilities. Their release phase is **status unverified** unless the [status register](/sources/) supplies explicit release evidence.
+**Hypothetical, not a recommended budget:** A developer's applicable ULB is equivalent to **100 credits**, all consumed. The shared pool still contains **20,000 credits**. Their next credit-consuming request is blocked. Increasing the team's metered budget cannot fix this; an authorized administrator must address the applicable ULB.
 
-| Control | What it governs | Enforcement |
-| --- | --- | --- |
-| User-level budget (ULB) | Each person's total credit consumption, including included credits | Always a hard stop |
-| Cost-center ULB | A per-person default for members of a cost center | Always a hard stop; overrides universal ULB |
-| Individual ULB | A specific person's consumption | Always a hard stop; overrides cost-center and universal ULB |
-| Cost-center budget | A group's metered charges | Hard stop only when enabled |
-| Organization budget | Metered charges for seats billed to that organization | Hard stop only when enabled |
-| Enterprise budget | Enterprise metered charges, subject to exclusions | Hard stop only when enabled |
-| Cost-center included-usage control | A cost center's draw on the included pool | Choose block or paid overage at the cap |
-
-**A cost-center budget does not partition the included pool.** The separate included-usage control caps included usage at the amount funded by licenses assigned to that cost center; GitHub calculates the amount. This is not a manually entered team allocation.
+Code completions and next edit suggestions continue. A budget block is not removal of the license.
 
 ## What gets checked first
 
-1. **Resolve the applicable ULB.** Individual overrides cost-center ULB, which overrides universal. This is precedence, not the smallest of three ULB amounts. If the applicable ULB is exhausted, the request is blocked. If none is set, this check does not impose a ULB cap.
-2. **Check included allowance and paid usage.** Business and Enterprise use the included pool while available, subject to applicable included-usage controls. After pool exhaustion, paid usage must be enabled. Copilot access starts at metered use.
-3. **Check metered spending controls.** GitHub documents the cost-center route first for assigned users, the licensing-organization route for users without a cost center, and the enterprise route when neither applies. By default cost-center usage also counts toward the enterprise budget. Do not read the routing order as permission to bypass an applicable enterprise limit.
+1. **Resolve one ULB:** individual > cost-center ULB > universal. This is precedence, **not the smallest of three amounts**. ULBs measure included plus metered consumption and always hard-stop. With none set, no ULB cap applies.
+2. **Check the funding phase:** included pool, applicable included-usage control, then permitted paid usage. Copilot access starts metered.
+3. **Check applicable metered controls:** GitHub routes assigned users through cost-center budgets, otherwise licensing-organization budgets, then enterprise budgets where neither applies. Cost-center usage normally also counts toward the enterprise cap.
 
-Across independent applicable controls, the least remaining enforced headroom can block the user first. Raising a team or enterprise budget does not override an exhausted ULB. Raising a ULB does not bypass an enforced metered limit.
-
-> **Example:** A user has consumed their applicable ULB. The enterprise still has included credits and the team has metered budget left. The user remains blocked; an administrator must address the applicable ULB, not add unrelated team budget.
+Across independent applicable controls, the least remaining **enforced** headroom can block first. A route is not permission to bypass another applicable cap. [Source: budget evaluation](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets).
 
 ## Strict cap or continuity
 
-The budget docs say to enable **Stop usage when budget limit is reached** to enforce a spending limit. They note it is off by default. The Well-Architected guidance instead recommends leaving the **enterprise** hard stop disabled to protect continuity, with alerts and an operational response.
-
-These are different risk choices, not different product behaviors:
+**Hypothetical choice:** Finance forbids additional overage for one workload; another approved workload must continue while an owner responds. These require different enforcement settings, not the same default copied everywhere.
 
 | Choose | Configure | Accept and mitigate |
 | --- | --- | --- |
-| Strict spending cap | Enable the hard stop on the applicable metered budget | Credit-consuming work can stop; publish escalation and recovery |
-| Continuity-first monitoring | Leave the selected metered hard stop off; configure alerts and named responders | Charges can exceed the threshold; maintain spending authority and timely intervention |
+| Strict spending cap | Enable **Stop usage when budget limit is reached** | Credit-consuming work can stop |
+| Continuity-first monitoring | Leave the selected metered hard stop off; assign alert responders | Charges can exceed the threshold |
 
-**Guide advice:** Record the choice with finance and workload owners before rollout. Do not copy alert-only guidance where overage is prohibited. Do not claim an alert-only budget enforces a financial ceiling. ULBs remain hard stops in either design.
+The [budget docs](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets) recommend hard stops for enforcement; [Well-Architected](https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/) recommends leaving the enterprise hard stop off for continuity. **Guide advice:** record the choice with finance and workload owners. Alert-only is not purchase authorization. ULBs remain hard stops either way.
 
-## Enterprise inclusion is a separate choice
+<details>
+<summary>Check exclusions and billing boundaries</summary>
 
-By default, cost-center usage counts against the enterprise budget. **Cost-center exclusion** lets selected cost centers operate independently of that enterprise cap. Their charges still exist; exclusion is not free usage, extra authorization, or exemption from ULBs.
+**Cost-center exclusion** separates selected centers from enterprise-cap aggregation, not from charges, ULBs or approval requirements. Monitor the total exposure across excluded and included centers.
 
-Use independent authority only when approved and documented. Monitor total enterprise financial exposure across excluded and non-excluded spending.
+For users licensed through multiple organizations, GitHub selects a billing organization each cycle. Prefer one licensing organization per user or direct cost-center assignment. GitHub App installation usage belongs to its owning organization; individual app/installation budgets are unavailable.
 
-## Organization boundaries can surprise you
+</details>
 
-The budget docs warn that when a user receives Business or Enterprise licenses from multiple organizations, GitHub selects a billing organization each cycle. Spend can land under different organization budgets. Prefer one licensing organization per user, or direct cost-center assignment where appropriate.
+## Choose budget type as well as scope
 
-GitHub App installation usage is billed to its owning organization. Individual app/installation budgets are not available; review app access and the organization's spending controls rather than promising per-app caps.
+A **Bundled AI credits budget** covers overage across AI-credit SKUs; a **SKU-level budget** targets one SKU. If another product exhausts the bundled hard budget, **AI Scan and agentic autofix can also stop**. A Code Security AI Credits SKU hard budget can independently block them. [Avoid overlapping limits that cause unexpected blocks](https://docs.github.com/en/billing/how-tos/set-up-budgets#plan-your-budget-type-and-scope).
 
-## Read the guardrail diagram
+User-scoped budgets currently cover **Copilot AI credits only**, even though the UI puts **Users** under the bundled budget type. A cost-center metered budget does not partition the included pool; use the [separate included-usage control](/planning/).
 
-The visual below shows the distinct governance layers. It is not a wallet-transfer model: remaining budget at one scope cannot replenish another scope's exhausted enforced limit.
+ULBs were [announced GA June 1](https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/); later [cost-center ULB](https://github.blog/changelog/2026-06-30-per-user-ai-credit-budgets-available-for-cost-centers/) and [included-usage](https://github.blog/changelog/2026-07-02-cost-centers-now-support-included-usage-caps/) launches do not establish an explicit GA phase. Check the [register, current setup evidence and Spark retirement caveat](/sources/).

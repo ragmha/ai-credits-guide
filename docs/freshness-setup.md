@@ -131,6 +131,12 @@ guide verification date unchanged. Unmerged proposals do not establish a new
 baseline. The agent may propose weekly verification-only refreshes after full
 checks; these remain subject to review.
 
+The watch list includes [Well-Architected release notes](https://learn.github.com/well-architected/overview/release-notes)
+and the [Copilot changelog feed](https://github.blog/changelog/label/copilot/feed/).
+These discover relevant changes; each linked article still needs full review.
+The workflow also follows relevant billing and budget announcements without
+requiring a Copilot label.
+
 Reviewers should:
 
 - Open the canonical sources, inspect the full-page evidence and changed
@@ -157,9 +163,11 @@ whether to accept each proposal. An unresolved factual conflict, unavailable
 source, or policy decision produces an issue instead of a speculative
 correction; other independently verified pages may still get a draft PR.
 Missing guide files produce a setup-blocker issue, not invented content.
-Diagram text is checked too: a source change invalidating a diagram creates a
-blocker issue and holds affected page dates for human correction. Diagram code
-is intentionally outside this workflow's edit allowlist.
+Diagram text is checked too: editable `.excalidraw` text, light/dark `.svg`
+exports, standalone `.html` wrappers and hypothetical worked scenarios must
+agree. A source change invalidating a diagram creates a blocker issue naming
+the source and exports and holds affected page dates for human correction.
+All diagram formats remain outside this workflow's edit allowlist.
 
 ## Failures and stale content
 
