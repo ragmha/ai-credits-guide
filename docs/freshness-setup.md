@@ -131,6 +131,12 @@ guide verification date unchanged. Unmerged proposals do not establish a new
 baseline. The agent may propose weekly verification-only refreshes after full
 checks; these remain subject to review.
 
+The watch list includes [Well-Architected release notes](https://learn.github.com/well-architected/overview/release-notes)
+and the [Copilot changelog feed](https://github.blog/changelog/label/copilot/feed/).
+These discover relevant changes; each linked article still needs full review.
+The workflow also follows relevant billing and budget announcements without
+requiring a Copilot label.
+
 Reviewers should:
 
 - Open the canonical sources, inspect the full-page evidence and changed

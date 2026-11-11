@@ -8,6 +8,8 @@ diagram: operating-loop
 sources:
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
+  - https://github.blog/changelog/2026-09-16-copilot-budget-increase-requests-are-generally-available/
+  - https://learn.github.com/well-architected/governance/recommendations/governing-agents
 ---
 
 ## What you will learn
@@ -42,11 +44,13 @@ These cadences follow Well-Architected guidance; your response-time targets and 
 
 Review total consumption and metered cost separately. Show usage by cost center and user profile, identify unmapped usage, and explain large changes using workload context. Distinguish shared-pool consumption from paid overage.
 
+For agent workloads, the [Well-Architected cost checklist](https://learn.github.com/well-architected/governance/recommendations/governing-agents#5-cost-management) pairs organization or cost-center spending limits with responsible alert recipients, model-cost education, and usage tracking. It calls for **Stop usage** when implementing hard caps; keep the [cap-versus-continuity decision](/controls/#strict-cap-or-continuity) explicit.
+
 Track blocks and exception requests as user-experience signals. An unusually low spend might mean efficient work, low adoption, or people being blocked. A high spend might be valuable work or waste. Use outcomes and user feedback before judging either.
 
 ## When somebody is blocked
 
-Confirm the control that actually stopped the request. Budget restrictions do not remove a seat. The docs describe recovery through the next billing cycle, an administrator increasing the relevant budget, or an approved additional-budget request.
+Confirm the control that actually stopped the request. Budget restrictions do not remove a seat. The docs describe recovery through the next billing cycle or an administrator increasing the relevant budget. The built-in budget-increase request flow is [GA for Copilot Business and Enterprise under usage-based billing, but not available for enterprises with managed users](https://github.blog/changelog/2026-09-16-copilot-budget-increase-requests-are-generally-available/). Managed-user enterprises need their own escalation route to an authorized administrator.
 
 Inline code completions and next edit suggestions continue because they do not consume AI credits. Communicate this clearly so users do not mistake a budget event for total loss of Copilot.
 

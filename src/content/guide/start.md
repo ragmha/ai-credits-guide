@@ -8,6 +8,9 @@ sources:
   - https://learn.github.com/well-architected/
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing
+  - https://docs.github.com/en/copilot/concepts/enterprise/learning-about-new-features-and-models
+  - https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies
+  - https://docs.github.com/en/site-policy/github-terms/github-pre-release-license-terms
 ---
 
 ## What you will learn
@@ -47,5 +50,7 @@ There is deliberately no universal budget amount. Workload, model choice, contex
 ## How to read feature status
 
 **Public preview - use with caution** marks a feature explicitly identified as preview by an official source. Assess support, change risk, and your enterprise's preview policy before using it. **Status unverified** means the cited source documents the capability but does not establish a release phase; it is not a claim that the feature is GA.
+
+GitHub's [release-stage definitions](https://docs.github.com/en/copilot/concepts/enterprise/learning-about-new-features-and-models#considering-different-release-stages) distinguish previews from generally available features recommended for production. The [Opt in to preview features policy](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies#opting-in-to-previews-or-feedback) controls previews on GitHub.com, not every Copilot surface. Review the applicable [pre-release license terms](https://docs.github.com/en/site-policy/github-terms/github-pre-release-license-terms), including their non-production evaluation and testing restrictions, before enabling a preview; a caution tag is not production-use approval.
 
 The [source and release-status register](/sources/) records the evidence, including conflicting documentation. Guide advice is a suggested operating practice, not a statement of product enforcement or procurement authorization.

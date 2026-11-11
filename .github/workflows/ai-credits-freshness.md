@@ -79,10 +79,18 @@ Start with all of these, then follow relevant canonical budget, included-usage,
 AI credit, user-level budget, cost-center, and changelog links on the same hosts:
 
 - https://learn.github.com/well-architected/
+- https://learn.github.com/well-architected/overview/release-notes
 - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
+- https://learn.github.com/well-architected/governance/recommendations/governing-agents
 - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing
 - https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents
 - https://github.blog/changelog/2026-08-04-upcoming-deprecation-of-github-spark-on-github-com/
+- https://github.blog/changelog/label/copilot/feed/
+
+Use the release notes and changelog feed as discovery signals. Follow relevant
+entries to their complete official articles and recheck affected claims; a feed
+entry alone cannot establish release status or justify advancing a page date.
+Include billing and budget changes even when they are not tagged Copilot.
 
 Also retrieve every URL in the guide's frontmatter `sources` arrays. A source
 outside the allowlist needs a human decision, not a network-policy expansion.
@@ -146,6 +154,16 @@ Use UTC for all verification dates and ages.
 - Third-party coding agents' preview status must be checked independently;
   document both GitHub Actions minutes and AI credits when supported by the
   current sources. Do not assume one cost replaces the other.
+- Check preview labels per feature and endpoint, including CLI AI-credit session
+  limits, organization/user REST billing usage summaries, and enterprise custom
+  roles. Do not apply a summary endpoint's label to all billing APIs, or infer
+  GA for a later budget enhancement from the original ULB launch.
+- Recheck availability exclusions, including the managed-user exclusion for
+  built-in budget-increase requests. Preserve a documented escalation route
+  when the built-in flow is unavailable.
+- Preserve the distinction between bundled AI credits budgets and SKU-level
+  budgets. Check cross-product hard-stop effects, including Code Security AI
+  Credits; a Copilot ULB is not a cap on all AI-credit SKUs.
 - Billing documentation can retain historical products. In particular,
   reconcile Spark mentions against its official retirement notice (retired
   after August 31, 2026). Do not recommend Spark adoption based only on a

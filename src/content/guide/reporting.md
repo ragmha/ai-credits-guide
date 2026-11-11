@@ -8,6 +8,7 @@ diagram: attribution-pipeline
 sources:
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
+  - https://docs.github.com/en/rest/billing/usage
 ---
 
 ## What you will learn
@@ -41,3 +42,5 @@ Limit access to identifiable usage to people who need it. Follow your enterprise
 ## Read the attribution pipeline
 
 The diagram below traces the smallest useful path: source usage, mapping, reconciliation, and an owned decision. Add a warehouse or scheduled API integration only when the existing process no longer meets a measured need.
+
+If automating later, the organization/user **REST billing usage-summary endpoints — <span class="status caution">public preview - use with caution</span>** are explicitly labeled preview in the [REST reference](https://docs.github.com/en/rest/billing/usage). This label is specific to `GET /organizations/{org}/settings/billing/usage/summary` and `GET /users/{username}/settings/billing/usage/summary`, not every billing endpoint. Personal-user endpoints do not include usage billed through an organization or enterprise; select the paying account's reporting scope.

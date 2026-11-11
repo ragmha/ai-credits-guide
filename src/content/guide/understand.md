@@ -9,6 +9,9 @@ sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents
+  - https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/
+  - https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/
+  - https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot/
 ---
 
 ## What you will learn
@@ -20,6 +23,8 @@ sources:
 ## One billing unit, different kinds of cost
 
 GitHub AI Credits are the billing unit for metered Copilot usage. Input, output, and cached tokens are priced by model and converted into credits. The current [billing documentation](https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing#what-are-github-ai-credits) states **1 AI credit = $0.01 USD**. Budgets are configured in US dollars; consumption is displayed in AI credits.
+
+The [billing transition announcement](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/) and [June 1 release](https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/) establish the enterprise move to usage-based billing. Copilot code review also consumes Actions minutes, separately from AI credits.
 
 Copilot Chat, Copilot CLI, Copilot cloud agent, and Copilot Spaces consume AI credits. See the [status register](/sources/) before adopting capabilities whose release phase is not established by that source. Inline code completions and next edit suggestions do not consume AI credits and remain available at an enforced credit limit.
 
@@ -38,7 +43,7 @@ These are source-verified amounts as of the page's review date, not contractual 
 
 When the pool is exhausted, additional usage is metered if the **AI credits paid usage** policy permits it and applicable enforced limits allow the request. Additional usage is enabled by default for these plans; explicitly disable the policy if no overage is authorized. Do not assume a newly assigned license means paid usage is disabled.
 
-**Copilot access has no included allowance.** Its AI credit-consuming usage is metered from first use, and paid usage must be enabled for those features to work.
+**Copilot access has no included allowance.** Its AI credit-consuming usage is metered from first use, and paid usage must be enabled for those features to work. The [October 28 announcement](https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot/) establishes availability through GitHub or Microsoft account teams for GitHub Enterprise Cloud; it says self-serve availability is staged, not universally available.
 
 ## The reset is not your invoice date
 

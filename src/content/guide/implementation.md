@@ -9,6 +9,8 @@ sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://docs.github.com/en/billing/how-tos/set-up-budgets
   - https://docs.github.com/en/copilot/tutorials/budgets/getting-started-with-budget-controls
+  - https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/set-session-limit
+  - https://docs.github.com/en/copilot/tutorials/roll-out-at-scale/govern-at-scale/establish-ai-managers
 ---
 
 ## What you will learn
@@ -20,6 +22,8 @@ sources:
 ## Before you begin
 
 Confirm your billing entity, plan, and permissions. Enterprise owners and billing managers can set all budget controls; organization owners can set organization budgets. Have access to usage reporting and a reliable mapping of users to business units.
+
+**Enterprise custom roles — <span class="status caution">public preview - use with caution</span>** can delegate AI administration, but the [AI manager role recipe](https://docs.github.com/en/copilot/tutorials/roll-out-at-scale/govern-at-scale/establish-ai-managers) does not grant access to Copilot billing settings by default. AI administration is not billing authority.
 
 Use [GitHub's current budget setup instructions](https://docs.github.com/en/billing/how-tos/set-up-budgets) for exact navigation and available fields. This guide deliberately does not freeze screenshots of an administration UI that may change.
 
@@ -39,7 +43,7 @@ Tell users how to monitor consumption, why a ULB can block them while team budge
 
 ### 3. Create the enterprise metered budget
 
-In the billing budget configuration, select the AI credits product and enterprise scope. Set an approved amount, configure available threshold notifications, and assign recipients. Decide whether cost-center usage is included.
+In the billing budget configuration, select **Bundled AI credits budget** and enterprise scope for an all-AI-credits limit, or the appropriate **SKU-level budget** for a narrower limit. Check [cross-product coverage and overlap](/controls/#choose-budget-type-as-well-as-scope) before setting an approved amount, configuring available threshold notifications, and assigning recipients. Decide whether cost-center usage is included.
 
 Choose **Stop usage when budget limit is reached** deliberately. A strict-cap design enables it; a continuity-first design leaves it off and accepts the need to respond to alerts. See [the documented trade-off](/controls/#strict-cap-or-continuity). Review the separate **AI credits paid usage** policy.
 
@@ -74,6 +78,8 @@ Remember precedence: **individual > cost-center ULB > universal**. ULBs always e
 ### 7. Publish usage guidance
 
 Explain model/task fit, context discipline, and how users check their usage. Encourage small, bounded experiments. Do not use low consumption as a standalone productivity score.
+
+**CLI AI-credit session limits — <span class="status caution">public preview - use with caution</span>** offer a session-level control, but are soft limits: an in-progress response completes and can exceed the configured amount. They do not replace enterprise budgets or ULBs. Review the [session-limit documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/set-session-limit) and preview policy before adoption.
 
 **Done when:** Users can see their consumption and know how to select an appropriate model and request more headroom.
 

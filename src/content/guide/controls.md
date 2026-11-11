@@ -8,6 +8,11 @@ diagram: layered-guardrails
 sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
+  - https://docs.github.com/en/billing/how-tos/set-up-budgets
+  - https://docs.github.com/en/billing/concepts/budgets-and-alerts
+  - https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/
+  - https://github.blog/changelog/2026-06-30-per-user-ai-credit-budgets-available-for-cost-centers/
+  - https://github.blog/changelog/2026-07-02-cost-centers-now-support-included-usage-caps/
 ---
 
 ## What you will learn
@@ -31,6 +36,14 @@ The controls below are documented capabilities. Their release phase is **status 
 | Cost-center included-usage control | A cost center's draw on the included pool | Choose block or paid overage at the cap |
 
 **A cost-center budget does not partition the included pool.** The separate included-usage control caps included usage at the amount funded by licenses assigned to that cost center; GitHub calculates the amount. This is not a manually entered team allocation.
+
+User-level budgets were [announced as GA on June 1](https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/). The later [cost-center ULB](https://github.blog/changelog/2026-06-30-per-user-ai-credit-budgets-available-for-cost-centers/) and [included-usage cap](https://github.blog/changelog/2026-07-02-cost-centers-now-support-included-usage-caps/) announcements establish availability but do not explicitly label a release phase; neither should inherit GA status automatically. Those posts described REST-first launches, so use current setup docs rather than assuming their historical UI limitations still apply.
+
+## Choose budget type as well as scope
+
+A **Bundled AI credits budget** covers overage across all AI-credit SKUs, not just Copilot. A **SKU-level budget** targets one SKU; for example, **Code Security AI Credits** controls AI Scan and agentic autofix spending. If a bundled hard budget is exhausted by another product, it can also stop those security features. If both bundled and SKU hard budgets apply, exhausting either can block usage. [GitHub's setup guidance](https://docs.github.com/en/billing/how-tos/set-up-budgets#plan-your-budget-type-and-scope) recommends avoiding overlapping budgets that unexpectedly block users.
+
+User-scoped budgets are currently supported only for Copilot AI credits; the setup UI exposes **Users** scope under **Bundled AI credits budget**. Do not assume a Copilot ULB limits every AI-credit SKU. Older setup examples still list Spark; retain the [retirement caveat](/sources/#known-source-tensions), not an adoption recommendation.
 
 ## What gets checked first
 
