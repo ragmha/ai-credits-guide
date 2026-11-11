@@ -114,3 +114,47 @@ test('every full-size diagram overrides the opposite OS theme', async ({ page })
     }
   }
 });
+
+test('branded home keeps readable light/dark colors without web-font downloads', async ({ page }) => {
+  const fontRequests: string[] = [];
+  page.on('request', request => {
+    if (request.resourceType() === 'font') fontRequests.push(request.url());
+  });
+  await mkdir(shots, { recursive: true });
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./');
+    await expect(page.getByRole('heading', { name: 'Learn to budget GitHub AI credits', exact: true })).toBeVisible();
+    for (const theme of ['light', 'dark']) {
+      await page.emulateMedia({ colorScheme: theme === 'dark' ? 'light' : 'dark' });
+      await page.getByLabel('Color theme').selectOption(theme);
+      const colors = await page.evaluate(() => {
+        const bg = getComputedStyle(document.body).backgroundColor;
+        return {
+          bg,
+          text: getComputedStyle(document.querySelector('.lede')!).color,
+          accent: getComputedStyle(document.querySelector('.title-emphasis')!).color,
+          link: getComputedStyle(document.querySelector('.prose p a')!).color,
+        };
+      });
+      for (const foreground of [colors.text, colors.accent, colors.link]) {
+        expect(contrast(foreground, colors.bg)).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: `${shots}/home-${width}-${theme}.png`, fullPage: true });
+    }
+  }
+  expect(fontRequests).toEqual([]);
+});
+
+function contrast(a: string, b: string) {
+  const luminance = (color: string) => {
+    const [r, g, blue] = color.match(/\d+/g)!.slice(0, 3).map(Number).map(value => {
+      const channel = value / 255;
+      return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+    });
+    return .2126 * r + .7152 * g + .0722 * blue;
+  };
+  const values = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (values[0] + .05) / (values[1] + .05);
+}

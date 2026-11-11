@@ -135,16 +135,18 @@ and Agentic Workflows GA status are sourced independently.
 
 ## Design and scope decisions
 
-The requested learning-page reference informs the serif heading, chapter
-sidebar, breadcrumb, restrained violet/zinc palette, and reading column.
-Playfair Display, Inter, Schibsted Grotesk, and IBM Plex Mono are intentional
-reference-matched font choices, bundled locally from Fontsource with system fallbacks.
+The requested governance-training reference informs the near-black canvas,
+subtle square grid, system sans-serif typography, green section/numbering
+accents, blue links and compact bordered panels. The light counterpart uses
+cool gray and white surfaces with accessible green and blue accents.
+The chapter rail, visual-first lessons and reading column remain intact.
+No reference content, logo, announcement strip or unrelated features are copied.
 Diagrams use readable native sans-serif text with Excalidraw strokes and
 no network font dependency.
 The dev-only `clsx` pin preserves Astro's named export when Excalidraw's
 older transitive version would otherwise be hoisted to the project root.
-Font redistribution licenses for the main site are in `public/licenses/`.
-No reference branding or assets are copied.
+Legacy font redistribution licenses remain in `public/licenses/`; the page
+chrome now uses platform fonts without downloading custom web fonts.
 
 Theme defaults to the system preference; a visible select persists an
 override. The initial theme script runs before styles render. When browser

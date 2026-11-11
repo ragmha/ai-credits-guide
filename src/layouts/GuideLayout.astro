@@ -1,18 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Diagram from '../components/Diagram.astro';
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-500.css';
-import '@fontsource/inter/latin-600.css';
-import '@fontsource/inter/latin-700.css';
-import '@fontsource/playfair-display/latin-500.css';
-import '@fontsource/playfair-display/latin-600.css';
-import '@fontsource/schibsted-grotesk/latin-400.css';
-import '@fontsource/schibsted-grotesk/latin-500.css';
-import '@fontsource/schibsted-grotesk/latin-600.css';
-import '@fontsource/schibsted-grotesk/latin-700.css';
-import '@fontsource/ibm-plex-mono/latin-400.css';
-import '@fontsource/ibm-plex-mono/latin-500.css';
 import '../styles/global.css';
 
 interface Props {
@@ -28,6 +16,8 @@ const next = pages[current + 1];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const href = (id: string) => id === 'start' ? `${base}/` : `${base}/${id}/`;
 const stale = Date.now() - new Date(`${page.data.verified}T00:00:00Z`).getTime() > 30 * 86400000;
+const titleWords = page.data.title.split(' ');
+const titleEmphasis = page.id === 'start' ? titleWords.splice(-3).join(' ') : '';
 ---
 <!doctype html>
 <html lang="en">
@@ -56,7 +46,7 @@ const stale = Date.now() - new Date(`${page.data.verified}T00:00:00Z`).getTime()
     </header>
     <div class="shell">
       <aside class="sidebar">
-        <div class="edition">THE ENTERPRISE LEARNING GUIDE<span>AI credit budgeting</span></div>
+        <div class="edition">GUIDE CONTENTS<span>AI credit budgeting</span></div>
         <details class="chapter-nav" open>
           <summary>Explore the guide <span aria-hidden="true">⌄</span></summary>
           <nav aria-label="Guide chapters">
@@ -74,7 +64,7 @@ const stale = Date.now() - new Date(`${page.data.verified}T00:00:00Z`).getTime()
         <div class="article-grid">
           <article>
             <div class="eyebrow">{page.data.section}<span class="eyebrow-line"></span></div>
-            <h1>{page.data.title}</h1>
+            <h1>{titleWords.join(' ')}{titleEmphasis && <> <span class="title-emphasis">{titleEmphasis}</span></>}</h1>
             <p class="lede">{page.data.description}</p>
             <div class="page-meta"><span>ENTERPRISE GUIDE</span><span>Reviewed {page.data.verified}</span>{stale && <strong class="status caution">Review overdue · verify against sources</strong>}</div>
             {page.data.diagram && <section class="diagram-section" aria-label="Visual explanation">
