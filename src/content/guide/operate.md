@@ -5,6 +5,11 @@ order: 6
 description: Rehearse a blocked-user response, identify the real limit, and recover through an accountable decision.
 verified: "2026-11-10"
 diagram: operating-loop
+checks:
+  - question: An alert fires but nobody is blocked. What should the responder establish before changing a budget?
+    answer: Identify the billing entity, period, scope and actual control, including whether the threshold is alert-only. Spending may still be continuing, and the alert is not permission to increase it.
+  - question: Raising a team's metered budget did not unblock a user whose individual ULB is exhausted. What should happen next?
+    answer: Stop changing unrelated controls. Route the applicable ULB to its approver, have an authorized administrator apply any approved change, and verify the outcome.
 sources:
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
@@ -17,11 +22,21 @@ sources:
 - You can identify the control behind a block or alert.
 - You can route recovery to the right owner without bypassing approval.
 
+## Read the operating loop
+
+The arrows return from verification to review because a notification is the start of a decision, not its completion. Diagnosis identifies what is constrained. Approval establishes what may change. The administrator applies an authorized action and verifies its effect. The record then informs the next review.
+
+Keeping those steps separate prevents a common shortcut: interpreting spare enterprise budget as permission to raise any limit that might help. Spare headroom answers a financial-scope question; it does not identify the user's limiting control or replace the budget owner's authority.
+
 ## Worked scenario: raising the wrong budget does nothing
 
 **Hypothetical use case:** A developer reports a block. The responder sees spare enterprise budget and raises the team's metered limit. Nothing changes: the applicable individual ULB is exhausted. Stop changing unrelated controls; confirm consumption, ask the budget owner for a decision, then have an authorized administrator apply and verify it.
 
 **Guide advice:** Rehearse the visual loop in your existing operations system. Identify the billing entity, user, period and actual limiting control first. An alert-only threshold may mean spending continues, not that anyone is blocked.
+
+Continue the example as a tabletop exercise. The responder records the affected person and confirms that the exhausted individual ULB is applicable rather than a broader default. The budget owner then decides whether to approve an exception, adjust the workload or leave the limit unchanged. If an increase is approved, an authorized administrator changes that ULB and verifies whether the block is resolved. Another applicable control may still limit usage; approval of one change does not guarantee unlimited access.
+
+If the owner declines, the correct outcome is an explicit no-change decision with guidance for the user, not an unexplained incident closure. The exercise succeeds when the team can explain both the technical cause and who accepted the consequence. These are suggested operational practices, not a new automatic recovery feature.
 
 An approved increase, workload adjustment, attribution correction or no change are all possible outcomes. Record the approver, rationale and review/expiry date. A threshold itself authorizes none of them.
 

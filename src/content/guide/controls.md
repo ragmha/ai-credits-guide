@@ -6,6 +6,13 @@ description: Work through a blocked-user example, then compare a strict financia
 verified: "2026-11-10"
 diagram: layered-guardrails
 scenarioDiagram: cap-or-continuity
+checks:
+  - question: An individual ULB is higher than the universal ULB. Which one applies to that person?
+    answer: The individual ULB takes precedence. The limits are not added together and the smallest value is not selected.
+  - question: A developer has exhausted their ULB while shared credits remain. Will a larger metered team budget unblock them?
+    answer: No. The applicable ULB counts included and metered consumption and always hard-stops. An authorized decision must address that limit or the user must wait for the next cycle.
+  - question: A metered threshold sends an alert with its hard stop disabled. Must spending stop at the threshold?
+    answer: No. Charges can exceed it. Monitoring is neither a financial ceiling nor spending authorization.
 sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
@@ -21,11 +28,21 @@ sources:
 - You can diagnose a block without raising the wrong budget.
 - You can choose enforcement deliberately and identify cross-product effects.
 
+## Read the picture and the cookie jar
+
+The layered picture separates controls that answer different questions. First identify the one applicable personal limit. Then distinguish included usage from additional paid usage and determine which spending controls apply. The layers are not slices of a single wallet, and raising one does not erase another.
+
+The cookie jar makes that distinction tangible. Cookies stand for shared included credits; the personal snack note stands for the ULB. A full jar does not cancel a person's limit. When the jar is empty, buying extras represents metered usage: permission and applicable financial headroom now matter as well. A cookie is an analogy for consumption, not a promise that every real request costs the same amount.
+
 ## Worked scenario: credits remain, but the developer is blocked
 
 **Hypothetical, not a recommended budget:** A developer's applicable ULB is equivalent to **100 credits**, all consumed. The shared pool still contains **20,000 credits**. Their next credit-consuming request is blocked. Increasing the team's metered budget cannot fix this; an authorized administrator must address the applicable ULB.
 
 Code completions and next edit suggestions continue. A budget block is not removal of the license.
+
+Trace the example in two steps. The person's applicable limit has no remaining headroom, so the shared balance cannot make the next credit-consuming request succeed. The enterprise has supply but this person has reached their consumption limit. The correct escalation therefore concerns that ULB, not whether the enterprise should buy more credits.
+
+Now select **Jar empty; buying extras is allowed** in the illustration. The personal limit has headroom, but included funding is gone. In this case an enforced organization or enterprise metered cap can stop the work. The same visible symptom, a blocked request, can therefore require a different decision. Diagnose the control before proposing a change.
 
 ## What gets checked first
 

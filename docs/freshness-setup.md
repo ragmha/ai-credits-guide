@@ -8,7 +8,7 @@ workflow; keep both in version control after reviewing them. This setup was
 compiled with **gh-aw v0.72.1**. The online documentation can evolve faster than
 that version: recompile and review generated permissions after any upgrade.
 
-The workflow runs **Mondays at 07:37 UTC** (`37 7 * * 1`) and through
+When enabled, the workflow is scheduled for **Mondays at 07:37 UTC** (`37 7 * * 1`) and can run through
 **Actions → AI credits guide freshness → Run workflow**. Scheduled runs use the
 default branch; GitHub may delay schedules. Manual runs require the generated
 workflow to be present on the default branch.
@@ -24,7 +24,35 @@ GitHub Agentic Workflows is generally available, not public preview; see the
 [October 28, 2026 release announcement](https://github.blog/changelog/2026-10-28-github-agentic-workflows-generally-available/).
 Availability of individual Copilot/credits features is a separate question.
 
-## One-time credential setup
+## Current maintenance: manual review
+
+Repository maintainer **@ragmha** is assigned a **weekly manual review on
+Mondays at 07:37 UTC**, with the next planned review on **2026-11-16**.
+This is a manual responsibility, not an enabled reminder or automated run.
+No successful hosted freshness review has been recorded; do not advertise
+automatic freshness.
+
+Use the existing **Freshness and human review** process below:
+
+1. Read each page's complete canonical sources and compare its material claims,
+   release labels, self-check answers and diagram text with that evidence.
+   Apply the existing reviewer checklist and record coverage, including pages
+   not checked or blocked.
+2. Record actual findings and full-source evidence in a review PR using the
+   workflow's reporting format: requested/final URLs, UTC retrieval time,
+   article-text SHA-256, extraction method, checked claims, affected files and
+   supporting quotations. Update the bounded source observation ledger below
+   only for successful source checks, through human review. A first observation
+   is not evidence that a source changed.
+3. Use a `[freshness]` issue for inaccessible sources, contradictions or other
+   unresolved blockers, checking for duplicates first. Leave affected dates and
+   last successful ledger entries unchanged. Run the normal site checks before
+   accepting corrections.
+
+The ledger remains empty until actual source observations are reviewed.
+Assigning this cadence does not complete a review or advance any source date.
+
+## Future automation: one-time credential setup
 
 Publishing the site does not configure or activate the inference credential.
 A maintainer must complete the following:
@@ -97,14 +125,16 @@ this document; workflow code cannot be changed through the proposal allowlist.
 The source workflow asks for at most one PR and one consolidated blocker issue
 per run. Existing open proposals are checked to reduce duplicates.
 
-The source network allowlist is `learn.github.com`, `docs.github.com`, and
-`github.blog`; no general ecosystem or `defaults` baseline is requested. The compiler
+The source network allowlist is `learn.github.com`, `docs.github.com`,
+`github.blog`, `code.visualstudio.com`, `learn.microsoft.com`,
+`microsoft.github.io`, and `grafana.com`. The additional official vendor hosts
+cover the visualisation lessons; no general ecosystem or `defaults` baseline is requested. The compiler
 also adds the Copilot/GitHub endpoints needed for inference, tools, and safe
 outputs; those are not additional research sources. Review the compiled
 firewall configuration after compilation. There is no broad web-search tool,
 third-party reader, or proxy. Retrieval uses the declared shell and standard
 `curl`/Python tools; no speculative external fetch integration is required.
-The prompt restricts HTTPS redirects and source fetching to those three exact
+The prompt restricts HTTPS redirects and source fetching to those exact
 hosts, even where firewall domain matching includes subdomains. Firewall
 allowlisting is defense in depth, not a guarantee of article accuracy.
 
