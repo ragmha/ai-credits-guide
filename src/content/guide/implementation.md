@@ -5,6 +5,13 @@ order: 5
 description: Use the Start, Adopt and Advance roadmap to turn a budget decision into a working operating model.
 verified: "2026-11-10"
 diagram: rollout-roadmap
+checks:
+  - question: A paper pilot gives a user a $10 universal ULB, a $20 cost-center ULB and a $30 individual ULB. Which is applicable?
+    answer: The $30 individual ULB takes precedence. It is not the $10 minimum or a $60 sum. Other independent applicable controls can still stop the user earlier.
+  - question: An AI administration role is assigned. Does that alone prove the person can change billing settings?
+    answer: No. Administration and billing authority are different. Verify the permissions required for the proposed budget scope.
+  - question: Should recurring budget increases be automated before the manual approval and recovery process works?
+    answer: No. Prove the manual process, ownership and observed behavior first, then review API status and permissions before automation.
 sources:
   - https://learn.github.com/well-architected/governance/recommendations/managing-ai-credits/
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
@@ -18,6 +25,12 @@ sources:
 
 - You can implement the nine Well-Architected steps in three phases.
 - You can verify a pilot before scaling or automating it.
+
+## Read the roadmap
+
+The roadmap is a sequence of evidence, not just a list of settings to save. Start makes ownership and attribution usable. Adopt adds scoped controls and rehearsed recovery. Advance uses observed results to improve and then automate the process. Moving right is justified by a working handoff, not by how many controls have been enabled.
+
+This distinction matters because a saved amount can look correct while the wrong user assignment, enforcement setting or permission makes the design ineffective. Each phase below pairs an action with a "done when" condition. Treat those conditions as acceptance criteria from the approved brief.
 
 ## Before you begin
 
@@ -58,6 +71,10 @@ ULBs always hard-stop across included and metered consumption; a zero ULB blocks
 ## Validate before broad rollout
 
 **Worked pilot scenario (hypothetical):** A new team joins an existing cost center. Check its mapping and per-user default before inviting everyone else. Use existing records where possible; do not generate paid usage without authorization.
+
+Begin with a paper rehearsal, not a chargeable request. Suppose the universal ULB is $10, the cost-center ULB is $20 and one pilot user has a $30 individual ULB. These are illustrative values, not recommended limits. The individual value is applicable, so the expected personal limit is $30 rather than the $10 minimum or a $60 sum. A second member with no individual override inherits the applicable cost-center ULB.
+
+Next, review what would happen if the first user exhausted that $30 ULB. Shared credits and spare enterprise budget would not bypass it. Record the expected block, the approval route and how the administrator would verify an authorized change. If a separate applicable cap could block sooner, record that too. Compare the settings and any authorized observations with these expectations before expanding the pilot.
 
 | Check | Expected outcome |
 | --- | --- |

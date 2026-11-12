@@ -6,6 +6,13 @@ description: See where included credits come from, when paid usage starts, and w
 verified: "2026-11-10"
 diagram: credit-lifecycle
 scenarioDiagram: agent-meters
+checks:
+  - question: Two Business license holders contribute 3,800 included credits. Can one person consume more than 1,900 of them?
+    answer: Yes. The credits are shared, not reserved per user. That person's applicable ULB and any other applicable controls still matter.
+  - question: The shared pool is empty. Is an unused organization budget enough to allow the next credit-consuming request?
+    answer: No. Paid usage must be permitted and all applicable enforced controls must have headroom. A ULB can still block the user.
+  - question: Does an AI-credit cap also cap the Actions minutes used by an agent workload?
+    answer: No. They are separate meters and need separate review.
 sources:
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/billing
   - https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets
@@ -42,9 +49,19 @@ Additional usage is enabled by default for Business and Enterprise. Disable the 
 
 </details>
 
+## Worked example: shared does not mean evenly divided
+
+**Hypothetical arithmetic, not a budget recommendation:** Two Copilot Business license holders contribute 1,900 credits each, giving their enterprise a 3,800-credit included pool. Assume one licensing organization, no cost-center assignment and sufficient headroom under every applicable control.
+
+One person consumes 2,800 credits and the other consumes 1,000. The first person has not borrowed a private balance from the second: both drew from the same pool. The total is now 3,800, so there are no included credits left. These numbers represent consumption, not a fixed number of prompts; token use and model choice determine how much a task consumes.
+
+The next credit-consuming request needs paid usage to be permitted and applicable enforced limits to allow it. If paid usage is disabled, that work cannot continue merely because someone still has a license. If paid usage is allowed, its metered charges are a separate question from the fee for the two licenses. This is the transition shown in the lifecycle picture, not a purchase of another seat or a refill of a personal wallet.
+
 ## Worked scenario: an agent-heavy review day
 
 **Hypothetical use case:** A team enables Copilot code review for a large migration. The [June 1 release](https://github.blog/changelog/2026-06-01-updates-to-github-copilot-billing-and-plans/) confirms two meters: AI credits for model use and Actions minutes for runner work. An AI-credit cap does not cap Actions. Review both before scaling; no example here is a recommended spend.
+
+Read the two-meter picture below as two separate records of the same workload: model use consumes AI credits while runner work consumes Actions minutes. Reviewing only the AI-credit total leaves the runner side unexplained. In this example, the team needs to understand both before deciding whether a larger migration is financially approved; the diagram is not a statement that every feature uses both meters.
 
 **Third-party coding agents — <span class="status caution">public preview - use with caution</span>** also consume both meters. Check the [official agent documentation](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents) before adoption.
 

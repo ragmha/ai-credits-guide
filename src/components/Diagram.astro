@@ -32,6 +32,14 @@ const diagrams = {
     title: 'From usage to an accountable cost owner',
     description: 'Map the source usage report to owners, keep unmapped records visible and reconcile totals and periods. Start with showback; chargeback requires finance agreement.',
   },
+  'visualisation-map': {
+    title: 'Choose a view by the question',
+    description: 'GitHub billing data supports spend and attribution views. Copilot usage metrics describe adoption and activity. Instrumented client telemetry diagnoses agent behavior. Neither adoption metrics nor telemetry replaces billing.',
+  },
+  'grafana-dashboard': {
+    title: 'A billing dashboard without invented data',
+    description: 'This starter wireframe defines panels, source fields and questions, not live values. Consumption and charges come from billing exports; export freshness is local guide metadata. Client telemetry belongs in a separate diagnostic view.',
+  },
 };
 
 type DiagramName = keyof typeof diagrams;

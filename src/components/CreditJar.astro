@@ -1,0 +1,231 @@
+---
+import { coursePath } from '../course';
+const situations = [
+  { id: 'included', name: 'Cookies left; shopping budget used up', pool: true, ulb: true, paid: true, org: false, enterprise: true,
+    analogy: 'You can still take a cookie from the jar.',
+    result: 'Served from the shared pool',
+    detail: 'The organization metered hard stop is reached, but the applicable ULB has headroom and included credits remain. Metered spending budgets do not cap the included pool.' },
+  { id: 'ulb', name: 'Cookies left; my snack limit is used up', pool: true, ulb: false, paid: true, org: true, enterprise: true,
+    analogy: 'The jar has cookies, but you have reached your limit.',
+    result: 'Blocked by the user-level budget',
+    detail: 'The shared pool still has credits, but the applicable ULB is exhausted. Raising an organization or enterprise metered budget does not unblock this user.' },
+  { id: 'metered', name: 'Jar empty; buying extras is allowed', pool: false, ulb: true, paid: true, org: true, enterprise: true,
+    analogy: 'You can have a shop-bought cookie. It costs extra.',
+    result: 'Served as metered usage',
+    detail: 'The pool is empty, paid usage is enabled, and the applicable ULB and enforced spending controls have headroom. This request generates metered charges.' },
+  { id: 'policy', name: 'Jar empty; buying extras is switched off', pool: false, ulb: true, paid: false, org: true, enterprise: true,
+    analogy: 'The jar is empty, and buying more is not permitted.',
+    result: 'Blocked by the paid-usage policy',
+    detail: 'An empty pool does not automatically authorize overage. Paid usage must be enabled; remaining budget alone is not permission to spend.' },
+  { id: 'org', name: 'Jar empty; organization budget used up', pool: false, ulb: true, paid: true, org: false, enterprise: true,
+    analogy: 'You have room for a snack, but the shopping budget is used up.',
+    result: 'Blocked by the organization budget',
+    detail: "The licensing organization's enforced metered budget is exhausted. Remaining ULB or enterprise headroom cannot override this applicable hard stop." },
+  { id: 'enterprise', name: 'Jar empty; enterprise cap reached', pool: false, ulb: true, paid: true, org: true, enterprise: false,
+    analogy: 'The overall spending cap stops the purchase.',
+    result: 'Blocked by the enterprise cap',
+    detail: 'The applicable enforced enterprise cap is exhausted. Remaining ULB or organization headroom cannot override it. This example has no cost-center exclusion.' },
+];
+const initial = situations[1];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<figure class="credit-jar" id="credit-jar" data-pool="true" data-ulb="false" data-blocked="true">
+  <div class="jar-heading"><span>THE COOKIE-JAR RULE</span><strong>Shared supply. Personal limit. Extra spending.</strong></div>
+  <p class="jar-intro">Everyone shares the jar. Each person has a snack limit. If the jar is empty, buying extras needs permission and budget.</p>
+  <fieldset class="jar-controls" hidden>
+    <legend>Try a situation</legend>
+    <div class="situation-list">
+      {situations.map(situation => <label><input type="radio" name="credit-situation" value={situation.id} checked={situation.id === initial.id}
+        data-pool={String(situation.pool)} data-ulb={String(situation.ulb)} data-paid={String(situation.paid)}
+        data-org={String(situation.org)} data-enterprise={String(situation.enterprise)}
+        data-analogy={situation.analogy} data-result={situation.result} data-detail={situation.detail}/>{situation.name}</label>)}
+    </div>
+  </fieldset>
+  <div class="jar-readout" role="status" aria-live="polite" aria-atomic="true">
+    <strong data-jar-analogy>{initial.analogy}</strong>
+    <p><b data-jar-result>{initial.result}</b>. <span data-jar-detail>{initial.detail}</span></p>
+  </div>
+  <div class="jar-scene">
+    <div class="shared-jar">
+      <svg viewBox="0 0 310 310" role="img" aria-labelledby="credit-jar-title credit-jar-desc">
+        <title id="credit-jar-title">One cookie jar shared by everyone</title>
+        <desc id="credit-jar-desc">Included credits are like cookies in a shared jar, not a private jar for each person. The jar becomes empty in the paid-usage situations.</desc>
+        <defs>
+          <symbol id="credit-jar-cookie" viewBox="-26 -26 52 52">
+            <circle class="cookie-edge" cy="2" r="24"/>
+            <circle class="cookie-top" cy="-2" r="23"/>
+            <circle class="cookie-crust" cy="-2" r="19"/>
+            <path class="chocolate" d="M-11-14l7 2-2 6-7-2z M8-13l6 3-3 6-6-3z M-5 0l6-3 4 6-6 3z M-14 8l5-3 3 6-5 3z M8 10l5-3 3 6-6 2z"/>
+          </symbol>
+        </defs>
+        <ellipse class="jar-base" cx="156" cy="281" rx="83" ry="15"/>
+        <path class="jar-glass" d="M95 68v24c0 12-20 21-20 42v123c0 30 162 30 162 0V134c0-21-20-30-20-42V68Z"/>
+        <path class="jar-side" d="M213 94c1 20 17 26 17 45v114c0 13-16 20-30 22V118Z"/>
+        <g class="pool-cookies">
+          {[[126,139,-12],[177,132,15],[151,169,-8],[119,205,-14],[183,203,12],[151,237,7]].map(([x,y,angle]) =>
+            <g transform={`translate(${x} ${y}) rotate(${angle})`}><use href="#credit-jar-cookie" x="-26" y="-26" width="52" height="52"/></g>)}
+        </g>
+        <path class="jar-outline" d="M95 68v24c0 12-20 21-20 42v123c0 30 162 30 162 0V134c0-21-20-30-20-42V68"/>
+        <path class="jar-shine" d="M86 147v87m7-102v-5"/>
+        <ellipse class="jar-mouth" cx="156" cy="68" rx="61" ry="16"/>
+        <ellipse class="jar-mouth-inner" cx="156" cy="68" rx="52" ry="10"/>
+        <g class="jar-label">
+          <path d="M107 202q49 12 98 0v36q-49 12-98 0Z"/>
+          <text x="156" y="228" text-anchor="middle">SHARED</text>
+        </g>
+        <g class="jar-lid">
+          <path d="M19 266v7c0 14 74 14 74 0v-7"/>
+          <ellipse cx="56" cy="266" rx="37" ry="11"/>
+          <ellipse cx="56" cy="266" rx="29" ry="7"/>
+        </g>
+      </svg>
+      <strong>Shared jar = included credits</strong>
+      <span data-jar-supply>Cookies remain</span>
+    </div>
+    <div class="personal-snack">
+      <div class="snack-note">
+        <h3>This person's snack limit</h3>
+        <p><strong><span data-jar-eaten>2</span> of 2</strong> already eaten</p>
+        <svg class="snack-tally" viewBox="0 0 120 52" aria-hidden="true">
+          <circle class="empty-slot" cx="87" cy="26" r="22"/>
+          <use href="#credit-jar-cookie" width="52" height="52"/>
+          <use class="second-snack" href="#credit-jar-cookie" x="61" width="52" height="52"/>
+        </svg>
+        <p><b>ULB = total personal consumption.</b><br/>Cookies from the jar <em>and</em> the shop count.</p>
+        <small>The two-cookie limit is illustrative, not a GitHub allowance.</small>
+      </div>
+      <svg class="snack-plate" viewBox="0 0 240 90" role="img" aria-labelledby="credit-plate-title credit-plate-desc">
+        <title id="credit-plate-title">Can this person have the next cookie?</title>
+        <desc id="credit-plate-desc">The plate stays empty if any applicable rule blocks the request. Otherwise a cookie appears on it.</desc>
+        <ellipse class="plate-edge" cx="120" cy="59" rx="86" ry="23"/>
+        <ellipse class="plate-top" cx="120" cy="54" rx="86" ry="23"/>
+        <ellipse class="plate-ring" cx="120" cy="54" rx="67" ry="16"/>
+        <g class="next-cookie"><use href="#credit-jar-cookie" x="93" y="18" width="54" height="54"/></g>
+      </svg>
+      <span data-jar-serving>No next cookie</span>
+    </div>
+  </div>
+  <div class="shopping-rule">
+    <svg viewBox="0 0 100 120" aria-hidden="true">
+      <use href="#credit-jar-cookie" x="15" y="8" width="45" height="45"/>
+      <use href="#credit-jar-cookie" x="42" y="14" width="45" height="45"/>
+      <path class="bag-side" d="M12 38h65l13 65H8Z"/>
+      <path class="bag-front" d="M12 38h54l8 65H8Z"/>
+      <path class="bag-handle" d="M28 52V34a13 13 0 0 1 26 0v18"/>
+      <text x="40" y="85" text-anchor="middle">EXTRAS</text>
+    </svg>
+    <div>
+      <h3>Buying extras = metered usage</h3>
+      <p data-jar-shopping>Not needed while included credits remain.</p>
+      <dl class="shopping-checks">
+        <div><dt>Paid usage policy</dt><dd data-jar-policy>Enabled</dd></div>
+        <div><dt>Organization budget</dt><dd data-jar-org>Headroom</dd></div>
+        <div><dt>Enterprise cap</dt><dd data-jar-enterprise>Headroom</dd></div>
+      </dl>
+      <small>A metered threshold only blocks usage when its hard stop is enabled. The ULB still applies to bought cookies.</small>
+    </div>
+  </div>
+  <figcaption>
+    <strong>Teaching analogy, not a billing simulator.</strong> Cookies stand for consumption, not a fixed number of requests. Bought cookies represent chargeable usage, not a prepaid refill of the shared pool.
+    These examples assume Copilot Business or Enterprise, one licensing organization and no cost-center assignment or exclusion.
+    See <a href={`${base}/${coursePath('controls')}/#what-gets-checked-first`}>the full control rules below</a> and <a href="https://docs.github.com/en/copilot/concepts/billing-and-usage/organizations-and-enterprises/budgets">GitHub's budget documentation</a>.
+  </figcaption>
+  <noscript><p>The jar has cookies, but this person has reached their snack limit. Interactive choices need JavaScript; all situations are explained here:</p>
+    <dl>{situations.map(situation => <><dt>{situation.name}</dt><dd>{situation.analogy} {situation.detail}</dd></>)}</dl>
+  </noscript>
+</figure>
+<script>
+  const jar = document.querySelector<HTMLElement>('.credit-jar')!;
+  function updateJar() {
+    const state = jar.querySelector<HTMLInputElement>('input:checked')!.dataset;
+    const blocked = state.ulb === 'false' || (state.pool === 'false' && [state.paid, state.org, state.enterprise].includes('false'));
+    jar.dataset.pool = state.pool;
+    jar.dataset.ulb = state.ulb;
+    jar.dataset.blocked = String(blocked);
+    const text = (name: string, value: string) => { jar.querySelector<HTMLElement>(`[data-jar-${name}]`)!.textContent = value; };
+    for (const key of ['analogy', 'result', 'detail'] as const) text(key, state[key]!);
+    text('supply', state.pool === 'true' ? 'Cookies remain' : 'The jar is empty');
+    text('eaten', state.ulb === 'true' ? '1' : '2');
+    text('serving', blocked ? 'No next cookie' : 'One more cookie is allowed');
+    text('shopping', state.pool === 'true' ? 'Not needed while included credits remain.' : 'The jar is empty. Check permission and both applicable spending limits.');
+    text('policy', state.paid === 'true' ? 'Enabled' : 'Disabled');
+    for (const key of ['org', 'enterprise'] as const) text(key, state[key] === 'true' ? 'Headroom' : 'Hard stop reached');
+  }
+  updateJar();
+  const controls = jar.querySelector<HTMLFieldSetElement>('fieldset')!;
+  controls.hidden = false;
+  controls.addEventListener('change', updateJar);
+</script>
+<style>
+  .credit-jar{margin:28px 0 36px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);overflow:hidden}
+  .jar-heading{display:flex;flex-direction:column;gap:6px;padding:20px 22px 0;color:var(--ink)}
+  .jar-heading>span{font:600 10px/1.8 var(--font-mono);color:var(--accent);letter-spacing:1px}
+  .jar-heading>strong{font-size:20px;line-height:1.4}
+  .jar-intro{margin:10px 22px 20px;font-size:14px;color:var(--muted)}
+  .jar-controls{margin:0;padding:0 22px;border:0;min-width:0}
+  .jar-controls legend{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .situation-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .situation-list label{display:flex;align-items:center;gap:8px;padding:9px;border:1px solid var(--rule);border-radius:4px;font-size:12px;line-height:1.5;cursor:pointer}
+  .situation-list label:has(:checked){border-color:var(--accent);background:var(--tint)}
+  .situation-list label:has(:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+  .situation-list input{accent-color:var(--accent);flex-shrink:0;margin:0}
+  .jar-scene{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:22px;background:var(--inset)}
+  .shared-jar,.personal-snack{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
+  .shared-jar>svg{width:100%;max-width:310px;display:block}
+  .shared-jar>strong{color:var(--ink);font-size:14px}
+  .shared-jar>span,.personal-snack>span{font-size:13px;color:var(--muted)}
+  svg{stroke-linejoin:round}
+  .cookie-edge{fill:#946332;stroke:#65421f;stroke-width:1.5}
+  .cookie-top{fill:#dfb478;stroke:#946332;stroke-width:1.5}
+  .cookie-crust{fill:none;stroke:#c18c4b;stroke-width:1}
+  .chocolate{fill:#56351e}
+  .jar-base,.jar-side{fill:var(--rule)}
+  .jar-glass{fill:var(--surface);stroke:var(--muted);stroke-width:2}
+  .jar-outline{fill:none;stroke:var(--muted);stroke-width:2}
+  .jar-shine{fill:none;stroke:var(--rule);stroke-width:5;stroke-linecap:round}
+  .jar-mouth,.jar-lid path,.jar-lid ellipse{fill:var(--rule);stroke:var(--muted);stroke-width:1.5}
+  .jar-mouth-inner{fill:var(--inset);stroke:var(--muted)}
+  .jar-lid ellipse:last-child{fill:var(--surface)}
+  .jar-label path{fill:var(--tint);stroke:var(--accent)}
+  .jar-label text{fill:var(--accent);font:700 16px var(--font-sans);letter-spacing:1px}
+  .snack-note{border:1px solid var(--rule);border-top:4px solid var(--accent);background:var(--surface);padding:16px;width:100%}
+  h3{margin:0 0 8px;font-size:15px;line-height:1.5;color:var(--ink)}
+  .snack-note p{font-size:13px;line-height:1.7;margin:8px 0;color:var(--body)}
+  .snack-note p>strong{font-size:26px;color:var(--ink);display:block}
+  small{font-size:11px;line-height:1.6;color:var(--muted);display:block}
+  .snack-tally{width:120px;height:52px}
+  .empty-slot{fill:none;stroke:var(--muted);stroke-dasharray:3 4}
+  .snack-plate{width:100%;max-width:240px;height:90px}
+  .plate-edge{fill:var(--rule);stroke:var(--muted)}
+  .plate-top{fill:var(--surface);stroke:var(--muted)}
+  .plate-ring{fill:none;stroke:var(--rule)}
+  .pool-cookies,.second-snack,.next-cookie{transition:opacity .3s ease}
+  [data-pool=false] .pool-cookies,[data-ulb=true] .second-snack,[data-blocked=true] .next-cookie{opacity:0}
+  .shopping-rule{display:grid;grid-template-columns:90px 1fr;gap:20px;padding:22px;border-top:1px solid var(--rule)}
+  .shopping-rule>svg{width:100%;align-self:center}
+  .bag-side{fill:var(--accent);stroke:var(--accent)}
+  .bag-front{fill:var(--tint);stroke:var(--accent);stroke-width:1.5}
+  .bag-handle{fill:none;stroke:var(--accent);stroke-width:3}
+  .shopping-rule text{fill:var(--accent);font:700 11px var(--font-sans)}
+  .shopping-rule p{margin:0 0 12px;font-size:13px;color:var(--muted)}
+  .shopping-checks{margin:0 0 10px;font-size:12px;display:grid;gap:5px}
+  .shopping-checks>div{display:flex;justify-content:space-between;gap:12px}
+  dt{font-weight:600;color:var(--ink)}
+  dd{margin:0;color:var(--muted)}
+  .jar-readout{margin-top:22px;padding:18px 22px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--tint)}
+  [data-blocked=true] .jar-readout{background:var(--amber-bg)}
+  .jar-readout>strong{font-size:17px;line-height:1.5;color:var(--ink)}
+  .jar-readout p{font-size:13px;line-height:1.8;margin:8px 0 0}
+  figcaption{border-top:1px solid var(--rule);padding:16px 22px;color:var(--muted);font-size:12px;line-height:1.75}
+  noscript{display:block;padding:0 22px 16px;font-size:13px}
+  @media(max-width:500px){
+    .situation-list,.jar-scene{grid-template-columns:1fr}
+    .jar-scene{gap:28px}
+    .shared-jar>svg{max-width:250px}
+    .personal-snack{max-width:290px;width:100%;justify-self:center}
+    .shopping-rule{grid-template-columns:1fr;gap:12px}
+    .shopping-rule>svg{width:76px;justify-self:center}
+  }
+  @media(prefers-reduced-motion:reduce){.pool-cookies,.second-snack,.next-cookie{transition:none}}
+  @media print{.jar-controls{display:none}}
+</style>

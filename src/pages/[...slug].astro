@@ -1,11 +1,12 @@
 ---
 import { getCollection, render } from 'astro:content';
 import GuideLayout from '../layouts/GuideLayout.astro';
+import { coursePath } from '../course';
 
 export async function getStaticPaths() {
   const pages = await getCollection('guide');
   return pages.map((page) => ({
-    params: { slug: page.id === 'start' ? undefined : page.id },
+    params: { slug: coursePath(page.id) || undefined },
     props: { page },
   }));
 }
